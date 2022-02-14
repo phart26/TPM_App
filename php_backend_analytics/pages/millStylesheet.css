@@ -1,0 +1,151 @@
+/*Colors
+    #1F363D - Gunmetal grey
+    #40798C - Teal Blue
+    #70A9A1 - Teal Green
+    #9EC1A3 - Light Green
+    #CFE0C3 - Super Light Green (closest to white)
+    #FFE8D1 - Peach
+    #68C3D4 - Light Blue
+    #1A1A1A - Black
+
+Global
+-------------------------------------------------*/
+
+
+
+
+/*
+Title
+--------------------------------------------------*/
+.title{
+    text-align: center;
+}
+
+
+
+
+/*
+Table headers
+--------------------------------------------------*/
+
+h2{
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    font-size: 90px;
+    color: #8B0000;
+    padding-bottom: 20px;
+    text-align: center;
+}
+
+
+
+/*
+Table Entries
+--------------------------------------------------*/
+tbody{
+    font-size: 50px;
+    
+}
+
+thead{
+    font-size: 30px;
+}
+
+td{
+    text-align: center;
+    
+}
+
+
+.tableContainerOTT{
+    margin-left: 5%;
+    width: 90%;
+    margin-top: -10%;
+}
+.tableContainerFF{
+    margin-left: 5%;
+    width: 90%;
+}
+
+.brand{
+    background: #8B0000 !important;
+}
+
+.brand-text{
+    color: #8B0000 !important;
+    font-size: 30px !important;
+}
+
+.allTablesOTT{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+.allTablesFF{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+.center{
+    text-align: center;
+}
+#two{
+    font-size: 20px;
+}
+
+#millLink{
+    color: #8B0000;
+
+}
+
+#millLink:hover{
+    text-decoration: none;
+    opacity: .5;
+}
+
+
+
+
+
+
+/* For mobile
+------------------------------------------------*/
+
+@media screen and (max-width: 800px){
+    h2{
+        font-size: 30px;
+        padding-top: 50px;
+    }
+
+    tbody{
+        font-size: 12px;
+        
+    }
+    
+    thead{
+        font-size: 10px;
+    }
+    .allTablesOTT{
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .allTablesFF{
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    #millTT{
+
+        margin-left: 25%;
+        width: 150%;
+        margin-top: -25%;
+
+    }
+
+    .tableContainerOTT{
+        margin-top: 5%;
+    }
+
+    .tableContainerFF{
+        margin-top: -25%;
+    }
+
+
+
+    
+}

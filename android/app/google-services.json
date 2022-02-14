@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "472489557261",
+    "firebase_url": "https://tpmproject-d19c9.firebaseio.com",
+    "project_id": "tpmproject-d19c9",
+    "storage_bucket": "tpmproject-d19c9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:472489557261:android:00f9358615e9dce7d60444",
+        "android_client_info": {
+          "package_name": "com.allysoftsolutions.tpmapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "472489557261-vlu99r9jjcbtqh95umggjvjuepeok8vm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEwftLfJs6ahR-o_QvE7Gya9AI1GcShFk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "472489557261-vlu99r9jjcbtqh95umggjvjuepeok8vm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

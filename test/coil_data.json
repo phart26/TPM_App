@@ -1,0 +1,204 @@
+{
+  "coils": [
+    {
+      "Length": 137,
+      "Qty": 73,
+      "Crate": 3
+    },
+    {
+      "Length": 129,
+      "Qty": 50,
+      "Crate": 1
+    },
+    {
+      "Length": 88,
+      "Qty": 21,
+      "Crate": 10
+    },
+    {
+      "Length": 23,
+      "Qty": 31,
+      "Crate": 1
+    },
+    {
+      "Length": 146,
+      "Qty": 17,
+      "Crate": 1
+    },
+    {
+      "Length": 130,
+      "Qty": 36,
+      "Crate": 2
+    },
+    {
+      "Length": 23,
+      "Qty": 90,
+      "Crate": 4
+    },
+    {
+      "Length": 54,
+      "Qty": 71,
+      "Crate": 1
+    },
+    {
+      "Length": 116,
+      "Qty": 73,
+      "Crate": 10
+    },
+    {
+      "Length": 72,
+      "Qty": 71,
+      "Crate": 9
+    },
+    {
+      "Length": 149,
+      "Qty": 11,
+      "Crate": 7
+    },
+    {
+      "Length": 138,
+      "Qty": 27,
+      "Crate": 3
+    },
+    {
+      "Length": 21,
+      "Qty": 95,
+      "Crate": 8
+    },
+    {
+      "Length": 40,
+      "Qty": 43,
+      "Crate": 3
+    },
+    {
+      "Length": 46,
+      "Qty": 77,
+      "Crate": 1
+    },
+    {
+      "Length": 92,
+      "Qty": 96,
+      "Crate": 5
+    },
+    {
+      "Length": 141,
+      "Qty": 19,
+      "Crate": 6
+    },
+    {
+      "Length": 90,
+      "Qty": 74,
+      "Crate": 1
+    },
+    {
+      "Length": 90,
+      "Qty": 9,
+      "Crate": 3
+    },
+    {
+      "Length": 99,
+      "Qty": 1,
+      "Crate": 4
+    },
+    {
+      "Length": 13,
+      "Qty": 92,
+      "Crate": 7
+    },
+    {
+      "Length": 110,
+      "Qty": 100,
+      "Crate": 9
+    },
+    {
+      "Length": 68,
+      "Qty": 64,
+      "Crate": 4
+    },
+    {
+      "Length": 58,
+      "Qty": 38,
+      "Crate": 9
+    },
+    {
+      "Length": 149,
+      "Qty": 60,
+      "Crate": 5
+    },
+    {
+      "Length": 70,
+      "Qty": 45,
+      "Crate": 1
+    },
+    {
+      "Length": 119,
+      "Qty": 65,
+      "Crate": 4
+    },
+    {
+      "Length": 138,
+      "Qty": 44,
+      "Crate": 3
+    },
+    {
+      "Length": 23,
+      "Qty": 5,
+      "Crate": 7
+    },
+    {
+      "Length": 132,
+      "Qty": 2,
+      "Crate": 10
+    },
+    {
+      "Length": 68,
+      "Qty": 90,
+      "Crate": 4
+    },
+    {
+      "Length": 26,
+      "Qty": 98,
+      "Crate": 5
+    },
+    {
+      "Length": 59,
+      "Qty": 13,
+      "Crate": 4
+    },
+    {
+      "Length": 41,
+      "Qty": 61,
+      "Crate": 8
+    },
+    {
+      "Length": 9,
+      "Qty": 98,
+      "Crate": 6
+    },
+    {
+      "Length": 33,
+      "Qty": 97,
+      "Crate": 8
+    },
+    {
+      "Length": 45,
+      "Qty": 53,
+      "Crate": 6
+    },
+    {
+      "Length": 32,
+      "Qty": 54,
+      "Crate": 8
+    },
+    {
+      "Length": 92,
+      "Qty": 36,
+      "Crate": 10
+    },
+    {
+      "Length": 54,
+      "Qty": 47,
+      "Crate": 9
+    }
+  ]
+}
