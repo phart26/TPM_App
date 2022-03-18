@@ -42,7 +42,7 @@ class JobScreenSteelReceivingState extends State<JobScreenSteelReceiving> {
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
-    if (data['jobs'].isEmpty) {
+    if ((data==null) || data['jobs'].isEmpty) {
       return Scaffold(
         appBar: AppBar(
           title: Text('Job List'),

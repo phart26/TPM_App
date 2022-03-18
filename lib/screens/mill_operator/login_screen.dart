@@ -1,5 +1,5 @@
 import 'package:device_info/device_info.dart';
-import 'package:flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:tpmapp/constants/my_style.dart';
 import 'package:tpmapp/constants/routes_name.dart';
@@ -17,7 +17,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _userid = TextEditingController();
   double height = 0;
-  bool ischecking = false;
+  bool isChecking = false;
   APICall api;
   Map<String, dynamic> data;
 
@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
         height: height,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: (ischecking)
+          child: (isChecking)
               ? Container(
                   child: Center(
                       child: Column(
@@ -129,15 +129,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             )..show(context);
                           else {
                             setState(() {
-                              ischecking = true;
+                              isChecking = true;
                             });
-                            await APICall()
-                                .getJSONToken(widget.pref, _userid.text);
+                            await APICall().getJSONToken(widget.pref, _userid.text);
                             setState(() {
-                              ischecking = false;
+                              isChecking = false;
                             });
-                            print(
-                                'widget.pref.userDetails ${widget.pref.userDetails}');
+                            print('widget.pref.userDetails ${widget.pref.userDetails}');
                             if (widget.pref.userDetails != null) {
                               // mill user
                               if (widget.pref.mode == 1) {

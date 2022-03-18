@@ -41,7 +41,7 @@ class _MeshJobScreenState extends State<MeshJobScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (data['meshJobs'].length == 0) {
+    if ((data == null) || data['meshJobs'].length == 0) {
       return Scaffold(
         appBar: AppBar(
           title: Text('Job List'),

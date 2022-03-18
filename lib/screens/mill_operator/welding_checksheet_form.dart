@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:tpmapp/constants/my_style.dart';
 import 'package:tpmapp/constants/routes_name.dart';
@@ -72,7 +72,7 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
         if (data['formData']['firstCoils'].length > 0) {
           coils =
               coilsFromJson(json.encode(data['formData']['firstCoils'])) ?? [];
-          selCoil = coils[0];
+          selCoil = coils.length > 0 ? coils[0] : '';
         } else
           coils = [];
         if (data['formData']['firstMesh'].length > 0) {
@@ -94,7 +94,7 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
         if (data['formData']['currentCoil'].length > 0) {
           coils =
               coilsFromJson(json.encode(data['formData']['currentCoil'])) ?? [];
-          selCoil = coils[0];
+          selCoil = coils.length > 0 ? coils[0] : '';
         } else
           coils = [];
         if (data['formData']['currentMesh'].length > 0) {
@@ -209,153 +209,153 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
           child: Container(
 //              height: height,
               child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                height: 50,
-                width: width * .30,
-                child: RaisedButton(
-                  color: secondaryColor,
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushReplacementNamed(Routes.loginScreen);
-                  },
-                  child: Text('Log Out',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                ),
-              ),
-              SizedBox(
-                height: 50,
-                width: width * .30,
-                child: RaisedButton(
-                  color: secondaryColor,
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushReplacementNamed(Routes.partMfgInfo);
-                  },
-                  child: Text('Set-Up Sheet',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            width: width,
-            child: _cardWeldingInfo(),
-          ),
-          if (int.parse(data['tubesMill']) == qty)
-            SizedBox(
-              width: width * 0.95,
-              child: RaisedButton(
-                  onPressed: () async {
-                    //setting the material to material of inital setup
-                    await api.getData(widget.pref);
-                    data = json.decode(widget.pref.jobData);
-                    setState(() {
-                      if (data['formData']['firstCoils'].length > 0) {
-                        coils = coilsFromJson(
-                                json.encode(data['formData']['firstCoils'])) ??
-                            [];
-                        selCoil = coils[0];
-                      } else
-                        coils = [];
-                      if (data['formData']['firstMesh'].length > 0) {
-                        meshs = meshsFromJson(
-                            json.encode(data['formData']['firstMesh']));
-                        selMeshTop = meshs[0];
-                        selMeshBot = meshs[1];
-                      } else {
-                        meshs = [];
-                      }
-                      if (data['formData']['firstMesh'].length > 0) {
-                        drainages = meshsFromJson(
-                            json.encode(data['formData']['firstMesh']));
-                        selDrainageTop = drainages[2];
-                        selDrainageBot = drainages[3];
-                      } else {
-                        drainages = [];
-                      }
-                    });
-                    widget.pref.isOrderStarted = true;
-
-                    setState(() {
-                      started = true;
-                    });
-                  },
-                  color: primaryColor,
-                  child: Text(
-                    'Start Order',
-                    style: bigFontStyle.copyWith(color: Colors.white),
-                  )),
-            ),
-          if (started ||
-              data['formData']['nextTubeMill'] != "" ||
-              data['formData']['nextTube'] != "")
-            SizedBox(width: width * 0.97, child: orderStartedInfoCard()),
-          SizedBox(
-            height: 10,
-          ),
-          if ((int.parse(data['tubesMill']) == 0) &&
-              (data['formData']['nextTubeMill'] == ""))
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
                 children: [
-                  SizedBox(
-                    width: width * 0.5,
-                    child: Text('No Tubes Available',
-                        style: bigFontStyle.copyWith(color: Colors.black)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        height: 50,
+                        width: width * .30,
+                        child: RaisedButton(
+                          color: secondaryColor,
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushReplacementNamed(Routes.loginScreen);
+                          },
+                          child: Text('Log Out',
+                              style:
+                              TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                        width: width * .30,
+                        child: RaisedButton(
+                          color: secondaryColor,
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushReplacementNamed(Routes.partMfgInfo);
+                          },
+                          child: Text('Set-Up Sheet',
+                              style:
+                              TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(
-                    height: 50,
-                    width: width * .49,
-                    child: RaisedButton(
-                      color: secondaryColor,
-                      onPressed: () async {
-                        //Update the api
-                        await api.getData(widget.pref);
+                    width: width,
+                    child: _cardWeldingInfo(),
+                  ),
+                  if (int.parse(data['tubesMill']) == qty)
+                    SizedBox(
+                      width: width * 0.95,
+                      child: RaisedButton(
+                          onPressed: () async {
+                            //setting the material to material of inital setup
+                            await api.getData(widget.pref);
+                            data = json.decode(widget.pref.jobData);
+                            setState(() {
+                              if (data['formData']['firstCoils'].length > 0) {
+                                coils = coilsFromJson(
+                                    json.encode(data['formData']['firstCoils'])) ??
+                                    [];
+                                selCoil = coils.length > 0 ? coils[0] : '';
+                              } else
+                                coils = [];
+                              if (data['formData']['firstMesh'].length > 0) {
+                                meshs = meshsFromJson(
+                                    json.encode(data['formData']['firstMesh']));
+                                selMeshTop = meshs[0];
+                                selMeshBot = meshs[1];
+                              } else {
+                                meshs = [];
+                              }
+                              if (data['formData']['firstMesh'].length > 0) {
+                                drainages = meshsFromJson(
+                                    json.encode(data['formData']['firstMesh']));
+                                selDrainageTop = drainages[2];
+                                selDrainageBot = drainages[3];
+                              } else {
+                                drainages = [];
+                              }
+                            });
+                            widget.pref.isOrderStarted = true;
 
-                        setState(() {
-                          data = json.decode(widget.pref.jobData);
-                          if (data['formData']['nextTubeMill'] != "") {
-                            widget.pref.currentTubeNo =
-                                data['formData']['nextTubeMill'];
-                            widget.pref.currentTube = int.parse(
-                                widget.pref.currentTubeNo.substring(
-                                    widget.pref.currentTubeNo.indexOf('-') +
-                                        1));
-                          } else if (data['formData']['nextTube'] == "") {
-                            widget.pref.currentTube = 1;
-                            widget.pref.currentTubeNo =
-                                generateTubeNumber(widget.pref.currentTube);
-                          } else {
-                            widget.pref.currentTubeNo =
-                                data['formData']['nextTube'];
-                            widget.pref.currentTube = int.parse(
-                                widget.pref.currentTubeNo.substring(
-                                    widget.pref.currentTubeNo.indexOf('-') +
-                                        1));
-                          }
-                        });
-                      },
-                      child: Text('Refresh',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)),
+                            setState(() {
+                              started = true;
+                            });
+                          },
+                          color: primaryColor,
+                          child: Text(
+                            'Start Order',
+                            style: bigFontStyle.copyWith(color: Colors.white),
+                          )),
                     ),
+                  if (started ||
+                      data['formData']['nextTubeMill'] != "" ||
+                      data['formData']['nextTube'] != "")
+                    SizedBox(width: width * 0.97, child: orderStartedInfoCard()),
+                  SizedBox(
+                    height: 10,
                   ),
+                  if ((int.parse(data['tubesMill']) == 0) &&
+                      (data['formData']['nextTubeMill'] == ""))
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: width * 0.5,
+                            child: Text('No Tubes Available',
+                                style: bigFontStyle.copyWith(color: Colors.black)),
+                          ),
+                          SizedBox(
+                            height: 50,
+                            width: width * .49,
+                            child: RaisedButton(
+                              color: secondaryColor,
+                              onPressed: () async {
+                                //Update the api
+                                await api.getData(widget.pref);
+
+                                setState(() {
+                                  data = json.decode(widget.pref.jobData);
+                                  if (data['formData']['nextTubeMill'] != "") {
+                                    widget.pref.currentTubeNo =
+                                    data['formData']['nextTubeMill'];
+                                    widget.pref.currentTube = int.parse(
+                                        widget.pref.currentTubeNo.substring(
+                                            widget.pref.currentTubeNo.indexOf('-') +
+                                                1));
+                                  } else if (data['formData']['nextTube'] == "") {
+                                    widget.pref.currentTube = 1;
+                                    widget.pref.currentTubeNo =
+                                        generateTubeNumber(widget.pref.currentTube);
+                                  } else {
+                                    widget.pref.currentTubeNo =
+                                    data['formData']['nextTube'];
+                                    widget.pref.currentTube = int.parse(
+                                        widget.pref.currentTubeNo.substring(
+                                            widget.pref.currentTubeNo.indexOf('-') +
+                                                1));
+                                  }
+                                });
+                              },
+                              child: Text('Refresh',
+                                  style: TextStyle(
+                                      fontSize: 20, fontWeight: FontWeight.bold)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  if ((started && (int.parse(data['tubesMill']) != 0)) ||
+                      data['formData']['nextTubeMill'] != "" ||
+                      data['formData']['nextTube'] != "")
+                    tubeEditCard(widget.pref.currentTubeNo),
                 ],
-              ),
-            ),
-          if ((started && (int.parse(data['tubesMill']) != 0)) ||
-              data['formData']['nextTubeMill'] != "" ||
-              data['formData']['nextTube'] != "")
-            tubeEditCard(widget.pref.currentTubeNo),
-        ],
-      ))),
+              ))),
     );
   }
 
@@ -523,7 +523,7 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 15),
                 ],
               ),
             ),
@@ -562,88 +562,98 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      SizedBox(
-                        width: width * 0.45,
-                        child: Text(
-                          '$title',
-                          style: bigBoldFontStyle.copyWith(
-                            fontSize: 25,
-                            color: Colors.black,
+                      Expanded(child:
+                        SizedBox(
+                          width: width * 0.45,
+                          child: Text(
+                            '$title',
+                            style: bigBoldFontStyle.copyWith(
+                              fontSize: 25,
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
+                        )
                       ),
-                      SizedBox(
-                        height: 50,
-                        width: width * 0.45,
-                        child: RaisedButton(
-                          color: secondaryColor,
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: Text('Confirm'),
-                                  content: Container(
-                                    height: 250,
-                                    width: 300,
-                                    child: Column(
-                                      children: [
-                                        SizedBox(
-                                          height: 100,
-                                          width: 200,
-                                          child: TextField(
-                                            keyboardType: TextInputType.number,
-                                            controller: _scrapLength,
-                                            maxLines: 1,
-                                            decoration: InputDecoration(
-                                                labelText: "Scrap Length"),
+                      Expanded(child:
+                        SizedBox(
+                          height: 50,
+                          width: width * 0.45,
+                          child: ElevatedButton(
+                            style: ButtonStyle( backgroundColor: MaterialStateProperty.all(Colors.blue) ),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text('Confirm'),
+                                    content: Container(
+                                      height: 220,
+                                      width: 300,
+                                      child: Column(
+                                        children: [
+                                          Expanded(child:
+                                            SizedBox(
+                                              height: 100,
+                                              width: 200,
+                                              child: TextField(
+                                                keyboardType: TextInputType.number,
+                                                controller: _scrapLength,
+                                                maxLines: 1,
+                                                decoration: InputDecoration(
+                                                    labelText: "Scrap Length"),
+                                              ),
+                                            )
                                           ),
-                                        ),
-                                        SizedBox(
-                                          height: 100,
-                                          width: 200,
-                                          child: TextField(
-                                            controller: _reason,
-                                            maxLines: 3,
-                                            decoration: InputDecoration(
-                                                labelText: "Reason for scrap"),
-                                          ),
-                                        )
-                                      ],
+                                          Expanded(child:
+                                            SizedBox(
+                                              height: 100,
+                                              width: 200,
+                                              child: TextField(
+                                                controller: _reason,
+                                                maxLines: 3,
+                                                decoration: InputDecoration(
+                                                    labelText: "Reason for scrap"),
+                                              ),
+                                            )
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  actions: [
-                                    RaisedButton(
-                                      onPressed: () async {
-                                        await api.postScarp(
-                                            widget.pref,
-                                            _reason.text ?? "",
-                                            selCoil.coilNo ?? "",
-                                            _scrapLength.text ?? "",
-                                            "M");
-                                        clearForm();
+                                    actions: [
+                                      ElevatedButton(
+                                        onPressed: () async {
+                                          await api.postScarp(
+                                              widget.pref,
+                                              _reason.text ?? "",
+                                              selCoil.coilNo ?? "",
+                                              _scrapLength.text ?? "",
+                                              "M");
+                                          clearForm();
 
-                                        Navigator.of(context).pop();
-                                      },
-                                      color: Colors.green,
-                                      child: Text('Scrap'),
-                                    ),
-                                    RaisedButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      color: Colors.red,
-                                      child: Text('No'),
-                                    )
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                          child: const Text('Scrap',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold)),
-                        ),
+                                          Navigator.of(context).pop();
+                                        },
+                                        // color: Colors.green,
+                                        style: ButtonStyle( backgroundColor: MaterialStateProperty.all(Colors.green) ),
+                                        child: Text('Scrap'),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        // color: Colors.red,
+                                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
+                                        child: Text('No'),
+                                      )
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: const Text('Scrap',
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold)),
+                          ),
+                        )
                       ),
                     ],
                   ),
@@ -750,7 +760,7 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                 ),
                               ),
                               actions: [
-                                RaisedButton(
+                                ElevatedButton(
                                   onPressed: () async {
                                     Map<String, dynamic> material = {
                                       "materialData": {
@@ -763,12 +773,8 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
 
                                     //update new material
                                     setState(() {
-                                      if (data['formData']['coils'].length >
-                                          0) {
-                                        coils = coilsFromJson(json.encode(
-                                                data['formData']['coils'])) ??
-                                            [];
-                                        // selCoil = coils[0];
+                                      if (data['formData']['coils'].length > 0) {
+                                        coils = coilsFromJson(json.encode(data['formData']['coils'])) ?? [];
                                       } else {
                                         coils = [];
                                       }
@@ -789,29 +795,19 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                                 SizedBox(
                                                   width: width * 0.9,
                                                   child:
-                                                      DropdownButtonFormField(
-//                    decoration: InputDecoration(labelText: 'Coil'),
+                                                  DropdownButtonFormField(
                                                     isExpanded: true,
                                                     value: selCoil,
                                                     onChanged: (v) {
                                                       selCoil = v;
                                                     },
-                                                    items: coils.map<
-                                                            DropdownMenuItem<
-                                                                Coils>>(
-                                                        (Coils value) {
-                                                      return DropdownMenuItem<
-                                                          Coils>(
-                                                        value: value,
-                                                        child: Text(
-                                                            '${value.coilNo} ${value.gage}',
-                                                            style: TextStyle(
-                                                                fontSize: 20,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                      );
-                                                    }).toList(),
+                                                    items: coils.map<DropdownMenuItem<Coils>>((Coils value) {
+                                                          return DropdownMenuItem<Coils>(
+                                                            value: value,
+                                                            child: Text( '${value.coilNo} ${value.gage}',
+                                                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                                          );
+                                                        }).toList(),
                                                   ),
                                                 ),
                                               ],
@@ -820,7 +816,6 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                           actions: [
                                             RaisedButton(
                                               onPressed: () {
-                                                Navigator.pop(dialogContext);
                                                 Navigator.pop(dialogContext);
                                               },
                                               color: Colors.green,
@@ -831,7 +826,8 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                       },
                                     );
                                   },
-                                  color: Colors.green,
+                                  // style: Colors.green,
+                                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green)),
                                   child: Text('Yes'),
                                 ),
                                 RaisedButton(
@@ -847,10 +843,8 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                         );
                       },
                       child: const Text('End Coil',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white)),
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)
+                      ),
                     ),
                   ),
                 ),
@@ -893,7 +887,7 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                           Map<String, dynamic> material = {
                                             "materialData": {
                                               "filter_no":
-                                                  selMeshTop.meshNo ?? ""
+                                              selMeshTop.meshNo ?? ""
                                             }
                                           };
                                           await api.postMaterialData(material);
@@ -904,7 +898,7 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                           //update new material
                                           setState(() {
                                             if (data['formData']['mesh']
-                                                    .length >
+                                                .length >
                                                 0) {
                                               meshs = meshsFromJson(json.encode(
                                                   data['formData']['mesh']));
@@ -929,7 +923,7 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                                       SizedBox(
                                                         width: width * 0.9,
                                                         child:
-                                                            DropdownButtonFormField(
+                                                        DropdownButtonFormField(
 //                    decoration: InputDecoration(labelText: 'Filter Mesh'),
                                                           isExpanded: true,
                                                           value: selMeshTop,
@@ -939,10 +933,10 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                                           items: meshs.map<
                                                               DropdownMenuItem<
                                                                   Meshs>>((Meshs
-                                                              value) {
+                                                          value) {
                                                             if (value.meshNo ==
-                                                                    selDrainageTop
-                                                                        .meshNo ||
+                                                                selDrainageTop
+                                                                    .meshNo ||
                                                                 value.meshNo ==
                                                                     selMeshBot
                                                                         .meshNo ||
@@ -956,16 +950,16 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                                                     '${value.meshNo} ${value.meshType}',
                                                                     style: TextStyle(
                                                                         fontSize:
-                                                                            20,
+                                                                        20,
                                                                         fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
+                                                                        FontWeight
+                                                                            .bold,
                                                                         color: Colors
                                                                             .white)),
                                                               );
                                                             if (value.meshNo !=
-                                                                    selDrainageTop
-                                                                        .meshNo &&
+                                                                selDrainageTop
+                                                                    .meshNo &&
                                                                 value.meshNo !=
                                                                     selMeshBot
                                                                         .meshNo &&
@@ -979,9 +973,9 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                                                     '${value.meshNo} ${value.meshType}',
                                                                     style: TextStyle(
                                                                         fontSize:
-                                                                            20,
+                                                                        20,
                                                                         fontWeight:
-                                                                            FontWeight.bold)),
+                                                                        FontWeight.bold)),
                                                               );
                                                           }).toList(),
                                                         ),
@@ -1059,7 +1053,7 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                           Map<String, dynamic> material = {
                                             "materialData": {
                                               "filter_no":
-                                                  selMeshBot.meshNo ?? ""
+                                              selMeshBot.meshNo ?? ""
                                             }
                                           };
                                           await api.postMaterialData(material);
@@ -1070,7 +1064,7 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                           //update new material
                                           setState(() {
                                             if (data['formData']['mesh']
-                                                    .length >
+                                                .length >
                                                 0) {
                                               meshs = meshsFromJson(json.encode(
                                                   data['formData']['mesh']));
@@ -1095,7 +1089,7 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                                       SizedBox(
                                                         width: width * 0.9,
                                                         child:
-                                                            DropdownButtonFormField(
+                                                        DropdownButtonFormField(
 //                    decoration: InputDecoration(labelText: 'Filter Mesh'),
                                                           isExpanded: true,
                                                           value: selMeshBot,
@@ -1105,10 +1099,10 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                                           items: meshs.map<
                                                               DropdownMenuItem<
                                                                   Meshs>>((Meshs
-                                                              value) {
+                                                          value) {
                                                             if (value.meshNo ==
-                                                                    selDrainageTop
-                                                                        .meshNo ||
+                                                                selDrainageTop
+                                                                    .meshNo ||
                                                                 value.meshNo ==
                                                                     selMeshTop
                                                                         .meshNo ||
@@ -1122,16 +1116,16 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                                                     '${value.meshNo} ${value.meshType}',
                                                                     style: TextStyle(
                                                                         fontSize:
-                                                                            20,
+                                                                        20,
                                                                         fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
+                                                                        FontWeight
+                                                                            .bold,
                                                                         color: Colors
                                                                             .white)),
                                                               );
                                                             if (value.meshNo !=
-                                                                    selDrainageTop
-                                                                        .meshNo &&
+                                                                selDrainageTop
+                                                                    .meshNo &&
                                                                 value.meshNo !=
                                                                     selMeshTop
                                                                         .meshNo &&
@@ -1145,9 +1139,9 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                                                     '${value.meshNo} ${value.meshType}',
                                                                     style: TextStyle(
                                                                         fontSize:
-                                                                            20,
+                                                                        20,
                                                                         fontWeight:
-                                                                            FontWeight.bold)),
+                                                                        FontWeight.bold)),
                                                               );
                                                           }).toList(),
                                                         ),
@@ -1233,7 +1227,7 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                           Map<String, dynamic> material = {
                                             "materialData": {
                                               "drain_no":
-                                                  selDrainageTop.meshNo ?? ""
+                                              selDrainageTop.meshNo ?? ""
                                             }
                                           };
                                           await api.postMaterialData(material);
@@ -1244,11 +1238,11 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                           //update new material
                                           setState(() {
                                             if (data['formData']['mesh']
-                                                    .length >
+                                                .length >
                                                 0) {
                                               drainages = meshsFromJson(
                                                   json.encode(data['formData']
-                                                      ['mesh']));
+                                                  ['mesh']));
                                               // selDrainageTop = drainages[0];
                                             } else {
                                               drainages = [];
@@ -1271,7 +1265,7 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                                       SizedBox(
                                                         width: width * 0.9,
                                                         child:
-                                                            DropdownButtonFormField(
+                                                        DropdownButtonFormField(
 //                    decoration: InputDecoration(labelText: 'Drainage Mesh'),
                                                           isExpanded: true,
                                                           value: selDrainageTop,
@@ -1281,10 +1275,10 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                                           items: drainages.map<
                                                               DropdownMenuItem<
                                                                   Meshs>>((Meshs
-                                                              value) {
+                                                          value) {
                                                             if (value.meshNo ==
-                                                                    selDrainageBot
-                                                                        .meshNo ||
+                                                                selDrainageBot
+                                                                    .meshNo ||
                                                                 value.meshNo ==
                                                                     selMeshTop
                                                                         .meshNo ||
@@ -1298,16 +1292,16 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                                                     '${value.meshNo} ${value.meshType}',
                                                                     style: TextStyle(
                                                                         fontSize:
-                                                                            20,
+                                                                        20,
                                                                         fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
+                                                                        FontWeight
+                                                                            .bold,
                                                                         color: Colors
                                                                             .white)),
                                                               );
                                                             if (value.meshNo !=
-                                                                    selDrainageBot
-                                                                        .meshNo &&
+                                                                selDrainageBot
+                                                                    .meshNo &&
                                                                 value.meshNo !=
                                                                     selMeshTop
                                                                         .meshNo &&
@@ -1321,9 +1315,9 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                                                     '${value.meshNo} ${value.meshType}',
                                                                     style: TextStyle(
                                                                         fontSize:
-                                                                            20,
+                                                                        20,
                                                                         fontWeight:
-                                                                            FontWeight.bold)),
+                                                                        FontWeight.bold)),
                                                               );
                                                           }).toList(),
                                                         ),
@@ -1403,7 +1397,7 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                           Map<String, dynamic> material = {
                                             "materialData": {
                                               "drain_no":
-                                                  selDrainageBot.meshNo ?? ""
+                                              selDrainageBot.meshNo ?? ""
                                             }
                                           };
                                           await api.postMaterialData(material);
@@ -1414,11 +1408,11 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                           //update new material
                                           setState(() {
                                             if (data['formData']['mesh']
-                                                    .length >
+                                                .length >
                                                 0) {
                                               drainages = meshsFromJson(
                                                   json.encode(data['formData']
-                                                      ['mesh']));
+                                                  ['mesh']));
                                               // selDrainageBot = drainages[0];
                                             } else {
                                               drainages = [];
@@ -1441,7 +1435,7 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                                       SizedBox(
                                                         width: width * 0.9,
                                                         child:
-                                                            DropdownButtonFormField(
+                                                        DropdownButtonFormField(
 //                    decoration: InputDecoration(labelText: 'Drainage Mesh'),
                                                           isExpanded: true,
                                                           value: selDrainageBot,
@@ -1451,10 +1445,10 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                                           items: drainages.map<
                                                               DropdownMenuItem<
                                                                   Meshs>>((Meshs
-                                                              value) {
+                                                          value) {
                                                             if (value.meshNo ==
-                                                                    selDrainageTop
-                                                                        .meshNo ||
+                                                                selDrainageTop
+                                                                    .meshNo ||
                                                                 value.meshNo ==
                                                                     selMeshTop
                                                                         .meshNo ||
@@ -1468,16 +1462,16 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                                                     '${value.meshNo} ${value.meshType}',
                                                                     style: TextStyle(
                                                                         fontSize:
-                                                                            20,
+                                                                        20,
                                                                         fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
+                                                                        FontWeight
+                                                                            .bold,
                                                                         color: Colors
                                                                             .white)),
                                                               );
                                                             if (value.meshNo !=
-                                                                    selDrainageTop
-                                                                        .meshNo &&
+                                                                selDrainageTop
+                                                                    .meshNo &&
                                                                 value.meshNo !=
                                                                     selMeshTop
                                                                         .meshNo &&
@@ -1491,9 +1485,9 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                                                     '${value.meshNo} ${value.meshType}',
                                                                     style: TextStyle(
                                                                         fontSize:
-                                                                            20,
+                                                                        20,
                                                                         fontWeight:
-                                                                            FontWeight.bold)),
+                                                                        FontWeight.bold)),
                                                               );
                                                           }).toList(),
                                                         ),
@@ -1559,8 +1553,8 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                             if (_odStart.text.isNotEmpty) {
                               double val = double.parse(_odStart.text ?? "0");
                               if (val <
-                                      NumberFormatter.roundDouble(
-                                          odVal - odNegVal, 3) ||
+                                  NumberFormatter.roundDouble(
+                                      odVal - odNegVal, 3) ||
                                   val >
                                       NumberFormatter.roundDouble(
                                           odVal + odPosVal + .004, 3)) {
@@ -1570,8 +1564,8 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                             } else if (_odEnd.text.isNotEmpty) {
                               double val = double.parse(_odEnd.text ?? "0");
                               if (val <
-                                      NumberFormatter.roundDouble(
-                                          odVal - odNegVal, 3) ||
+                                  NumberFormatter.roundDouble(
+                                      odVal - odNegVal, 3) ||
                                   val >
                                       NumberFormatter.roundDouble(
                                           odVal + odPosVal + .004, 3)) {
@@ -1587,9 +1581,9 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                 "tubeData": {
                                   "weld_chksheet": {
                                     "setup_op":
-                                        "${widget.pref.userDetails.userId}",
+                                    "${widget.pref.userDetails.userId}",
                                     "mill_op":
-                                        "${widget.pref.userDetails.userId}",
+                                    "${widget.pref.userDetails.userId}",
                                     "job": '${widget.pref.jobId}',
                                     "tube_id": '${widget.pref.currentTubeNo}',
                                     "od_check1": '${_odStart.text}',
@@ -1622,12 +1616,12 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                   setState(() {
                                     isScrap = false;
                                     widget.pref.currentTubeNo =
-                                        data['formData']['nextTube'];
+                                    data['formData']['nextTube'];
                                     widget.pref.currentTube = int.parse(widget
                                         .pref.currentTubeNo
                                         .substring(widget.pref.currentTubeNo
-                                                .indexOf('-') +
-                                            1));
+                                        .indexOf('-') +
+                                        1));
                                   });
                                 } else {
                                   setState(() {
@@ -1653,7 +1647,7 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                   Flushbar(
                                     title: "Scrapped tube up next",
                                     message:
-                                        "This tube was scrapped at inspection",
+                                    "This tube was scrapped at inspection",
                                     backgroundColor: Colors.blue,
                                     duration: Duration(seconds: 6),
                                   )..show(context);
@@ -1699,7 +1693,7 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                                                 Navigator.of(context).pop();
                                                 Navigator.of(context)
                                                     .pushReplacementNamed(
-                                                        Routes.loginScreen);
+                                                    Routes.loginScreen);
                                               },
                                               color: Colors.green,
                                               child: Text('Save'),
@@ -1726,7 +1720,7 @@ class _WeldingCheckSheetFormState extends State<WeldingCheckSheetForm> {
                               Flushbar(
                                 title: "Invalid value",
                                 message:
-                                    "Please enter value in range/ all fields",
+                                "Please enter value in range/ all fields",
                                 backgroundColor: Colors.red,
                                 duration: Duration(seconds: 2),
                               )..show(context);

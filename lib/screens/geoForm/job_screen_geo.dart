@@ -47,7 +47,7 @@ class _JobScreenGeoState extends State<JobScreenGeo> {
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
-    if (data['geoJobs'].isEmpty) {
+    if ((data == null) || data['geoJobs'].isEmpty) {
       return Scaffold(
         appBar: AppBar(
           title: Text('GeoForm Job List'),

@@ -42,7 +42,7 @@ class CoilSelectScreenState extends State<CoilSelectScreen> {
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
-    if (data['coils'].isEmpty) {
+    if ((data==null) || data['coils'].isEmpty) {
       return Scaffold(
         appBar: AppBar(
           title: Text('Job List'),

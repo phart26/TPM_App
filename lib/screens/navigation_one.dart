@@ -47,10 +47,7 @@ class __MyBottomNavigationBarOneState extends State<MyBottomNavigationBarOne> {
               Icons.business,
               color: Colors.white,
             ),
-            title: Text(
-              'Tube Mill Log',
-              style: TextStyle(color: Colors.white),
-            ),
+            label: "Tube Mill Log",
             backgroundColor: Theme.of(context).primaryColor,
           ),
           BottomNavigationBarItem(
@@ -58,10 +55,11 @@ class __MyBottomNavigationBarOneState extends State<MyBottomNavigationBarOne> {
               Icons.markunread_mailbox,
               color: Colors.white,
             ),
-            title: Text(
-              'Tube-Mill Setup',
-              style: TextStyle(color: Colors.white),
-            ),
+            label: 'Tube-Mill Setup',
+            // title: Text(
+            //   'Tube-Mill Setup',
+            //   style: TextStyle(color: Colors.white),
+            // ),
             backgroundColor: Theme.of(context).primaryColor,
           ),
           BottomNavigationBarItem(
@@ -69,10 +67,7 @@ class __MyBottomNavigationBarOneState extends State<MyBottomNavigationBarOne> {
               Icons.account_box,
               color: Colors.white,
             ),
-            title: Text(
-              'Welding-Station Check Sheet',
-              style: TextStyle(color: Colors.white),
-            ),
+            label: 'Welding-Station Check Sheet',
             backgroundColor: Theme.of(context).primaryColor,
           ),
           BottomNavigationBarItem(
@@ -80,10 +75,7 @@ class __MyBottomNavigationBarOneState extends State<MyBottomNavigationBarOne> {
               Icons.notifications,
               color: Colors.white,
             ),
-            title: Text(
-              'Worksheet',
-              style: TextStyle(color: Colors.white),
-            ),
+            label: 'Worksheet',
             backgroundColor: Theme.of(context).primaryColor,
           ),
         ],

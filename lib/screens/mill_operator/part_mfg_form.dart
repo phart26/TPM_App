@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:f_logs/model/flog/flog.dart';
-import 'package:flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:tpmapp/constants/my_style.dart';
 import 'package:tpmapp/constants/routes_name.dart';
@@ -43,9 +43,9 @@ class _PartMfgFromState extends State<PartMfgFrom> {
     data = json.decode(widget.pref.jobData);
 
     print(" data of colis ${data['formData']['coils']}");
-    if (data['formData']['coils'] != null) {
+    if ( (data['formData']['coils'].length > 0) && ( data['formData']['coils'] != null ) ) {
       coils = coilsFromJson(json.encode(data['formData']['coils'])) ?? [];
-      selCoil = coils[0];
+      selCoil = coils.length > 0 ? coils[0] : '';
     } else
       coils = [];
     if (data['formData']['mesh'].length > 0) {
@@ -82,8 +82,8 @@ class _PartMfgFromState extends State<PartMfgFrom> {
     if (double.parse(data['formData']['actMillAngle']) == 0) {
       startAngle = num.parse((asin(
                   double.parse(data['formData']['stripWidth']) /
-                      (3.1459 * double.parse(data['formData']['od']))) *
-              (180 / 3.1459))
+                      (3.14159 * double.parse(data['formData']['od']))) *
+              (180 / 3.14159))
           .toStringAsFixed(2));
     } else {
       startAngle = double.parse(data['formData']['actMillAngle']);
@@ -116,7 +116,7 @@ class _PartMfgFromState extends State<PartMfgFrom> {
                       coils = coilsFromJson(
                               json.encode(data['formData']['coils'])) ??
                           [];
-                      selCoil = coils[0];
+                      selCoil = coils.length > 0 ? coils[0] : null;
                     } else
                       coils = [];
                     if (data['formData']['mesh'].length > 0) {
@@ -163,9 +163,9 @@ class _PartMfgFromState extends State<PartMfgFrom> {
                     if (double.parse(data['formData']['actMillAngle']) == 0) {
                       startAngle = num.parse((asin(double.parse(
                                       data['formData']['stripWidth']) /
-                                  (3.1459 *
+                                  (3.14159 *
                                       double.parse(data['formData']['od']))) *
-                              (180 / 3.1459))
+                              (180 / 3.14159))
                           .toStringAsFixed(2));
                     } else {
                       startAngle =
@@ -289,15 +289,19 @@ class _PartMfgFromState extends State<PartMfgFrom> {
                   SizedBox(height: 5),
                   Row(
                     children: [
-                      SizedBox(
+                      Expanded(child:
+                        SizedBox(
                           width: width * 0.45,
                           child: Text("Job: ${data['formData']['job'] ?? '--'}",
                               style: bigFontStyle)),
-                      SizedBox(
+                      ),
+                      Expanded(child:
+                        SizedBox(
                           width: width * 0.45,
                           child: Text(
                               'Part#: ${data['formData']['partNum'] ?? "--"}',
                               style: bigFontStyle)),
+                      )
                     ],
                   ),
                   SizedBox(height: 5),
@@ -333,16 +337,20 @@ class _PartMfgFromState extends State<PartMfgFrom> {
                   SizedBox(height: 5),
                   Row(
                     children: [
-                      SizedBox(
-                          width: width * 0.45,
-                          child: Text(
-                              "Mat'l Gage: ${data['formData']['gage'] ?? "--"} ",
-                              style: bigFontStyle)),
-                      SizedBox(
-                          width: width * 0.47,
-                          child: Text(
-                              'Weld Spec Mill: ${data['formData']['millSpec'] ?? "--"}',
-                              style: bigFontStyle)),
+                      Expanded(child:
+                          SizedBox(
+                            width: width * 0.45,
+                            child: Text(
+                                "Mat'l Gage: ${data['formData']['gage'] ?? "--"} ",
+                                style: bigFontStyle))
+                      ),
+                      Expanded(child:
+                          SizedBox(
+                            width: width * 0.47,
+                            child: Text(
+                                'Weld Spec Mill: ${data['formData']['millSpec'] ?? "--"}',
+                                style: bigFontStyle)),
+                      ),
                     ],
                   ),
                   SizedBox(height: 5),
@@ -378,58 +386,54 @@ class _PartMfgFromState extends State<PartMfgFrom> {
                   SizedBox(height: 5),
                   Row(
                     children: [
-                      SizedBox(
+                      Expanded(child:
+                        SizedBox(
                           width: width * 0.45,
                           child: Text("Start Angle: " + startAngle.toString(),
                               style: bigFontStyle)),
-                      SizedBox(
+                      ),
+                      Expanded(child:
+                        SizedBox(
                           width: width * 0.47,
                           child: Text(
                               "Tube OD: ${data['formData']['od'] ?? "--"} +${data['formData']['odPos'] ?? "--"} -${data['formData']['odNeg'] ?? "--"}",
                               style: bigFontStyle)),
+                      )
                     ],
                   ),
                   SizedBox(height: 5),
                   Row(
                     children: [
-                      SizedBox(
-                          width: width * 0.45,
-                          child: Text(
-                              "Tube ID drift:${data['formData']['idDrift'] ?? "--"}",
-                              style: bigFontStyle)),
-                      SizedBox(
+                      Expanded(child:
+                          SizedBox(
+                            width: width * 0.45,
+                            child: Text("Table height: ${data['table_height'] ?? '0.0'} ", style: bigFontStyle))
+                      ),
+                      Expanded(child: SizedBox(
                           width: width * 0.47,
                           child: Text(
                               "Dimple Depth: ${data['formData']['dimpleDepth'] ?? "--"} +${data['formData']['dimpleDepthP'] ?? "--"} -${data['formData']['dimpleDepthM'] ?? "--"}",
-                              style: bigFontStyle)),
+                              style: bigFontStyle))
+                      )
                     ],
                   ),
                   SizedBox(height: 5),
                   Row(
                     children: [
-                      SizedBox(
-                        width: width * 0.45,
-                        child: Text(
-                            'Torch height: ${data['formData']['millTorchHeight'] ?? "--"}',
-                            style: bigFontStyle),
+                      Expanded(child:
+                        SizedBox(
+                          child: Text(
+                              'Table position:  ${data['table_position'] ?? '0.0'}',
+                              style: bigFontStyle),
+                        )
                       ),
-                      SizedBox(
-                        width: width * 0.45,
-                        child: Text(
-                            'Arc Length: ${data['formData']['archLength'] ?? "--"}',
-                            style: bigFontStyle),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 5),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: width * 0.45,
-                        child: Text(
-                            'Torch angle: ${data['formData']['torchAngle'] ?? "--"}',
-                            style: bigFontStyle),
-                      ),
+                      Expanded(child:
+                        SizedBox(
+                          width: width * 0.45,
+                          child: Text(
+                              "Tube ID drift:${data['formData']['idDrift'] ?? "--"}",
+                              style: bigFontStyle))
+                      )
                     ],
                   ),
                   SizedBox(height: 5),
@@ -562,7 +566,33 @@ class _PartMfgFromState extends State<PartMfgFrom> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 15),
+                  Row(
+                    children: [
+                      Expanded(child:
+                        SizedBox(
+                          child: Text(
+                              'Arc Length: ${data['formData']['archLength'] ?? "--"}',
+                              style: bigBoldFontStyle),
+                        ),
+                      ),
+                      Expanded(child:
+                        SizedBox(
+                          child: Text(
+                              'Torch height: ${data['formData']['millTorchHeight'] ?? "--"}',
+                              style: bigBoldFontStyle),
+                        ),
+                      ),
+                      Expanded(child:
+                        SizedBox(
+                          child: Text(
+                              'Torch angle: ${data['formData']['torchAngle'] ?? "--"}',
+                              style: bigBoldFontStyle),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 5),
                 ],
               ),
             ),

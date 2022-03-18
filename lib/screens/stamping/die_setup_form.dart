@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:f_logs/f_logs.dart';
-import 'package:flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tpmapp/constants/my_style.dart';

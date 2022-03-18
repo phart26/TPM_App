@@ -50,7 +50,7 @@ class _JobScreenState extends State<JobScreen> {
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
-    if (data['jobsInsp'].isEmpty) {
+    if ((data == null) || data['jobsInsp'].isEmpty) {
       return Scaffold(
         appBar: AppBar(
           title: Text('Job List'),

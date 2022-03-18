@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:f_logs/f_logs.dart';
-import 'package:flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tpmapp/constants/my_style.dart';
@@ -284,12 +284,8 @@ class _TubeMillSetupFormState extends State<TubeMillSetupForm> {
                                 width: width * 0.3,
                                 child: RaisedButton(
                                     onPressed: () {
-                                      var coils = coilsFromJson(json.encode(
-                                              data['formData']['coils'])) ??
-                                          [];
-                                      var meshs = meshsFromJson(json.encode(
-                                              data['formData']['mesh'])) ??
-                                          [];
+                                      var coils = coilsFromJson(json.encode(data['formData']['coils'])) ?? [];
+                                      var meshs = meshsFromJson(json.encode(data['formData']['mesh'])) ?? [];
                                       if (coils.length == 0) {
                                         Flushbar(
                                           title:
@@ -300,9 +296,7 @@ class _TubeMillSetupFormState extends State<TubeMillSetupForm> {
                                           duration: Duration(seconds: 2),
                                         )..show(context);
                                       } else
-                                        Navigator.of(context)
-                                            .pushReplacementNamed(
-                                                Routes.partMfgInfo);
+                                        Navigator.of(context).pushReplacementNamed(Routes.partMfgInfo);
                                     },
                                     color: primaryColor,
                                     child: Text(

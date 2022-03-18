@@ -19,6 +19,7 @@ class JobWaitingScreen extends StatefulWidget {
 class _JobWaitingScreenState extends State<JobWaitingScreen> {
   APICall api = APICall();
   Map<String, dynamic> data;
+  bool isLoading = false;
   @override
   void initState() {
     fetchJobs();
@@ -27,7 +28,9 @@ class _JobWaitingScreenState extends State<JobWaitingScreen> {
 
   fetchJobs() async {
     Map<String, dynamic> res = await api.getJobDetails(widget.pref);
-    widget.store.addJob(res['job']);
+    if(res != null)
+      widget.store.addJob(res['job']);
+
     setState(() {});
   }
 
@@ -60,6 +63,18 @@ class _JobWaitingScreenState extends State<JobWaitingScreen> {
                       ],
                     ),
                   ))
+                : isLoading ?
+                Container(
+                    padding: EdgeInsets.all(20),
+                    child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            CircularProgressIndicator(),
+                            SizedBox(height: 15),
+                            Text('Please wait a moment...', style: bigBoldFontStyle.copyWith(),)
+                          ],
+                        )))
                 : ListView(
                     children: [getJobCard(widget.store.jobs)],
                   )),
@@ -72,14 +87,14 @@ class _JobWaitingScreenState extends State<JobWaitingScreen> {
       padding: const EdgeInsets.fromLTRB(8.0, 3, 8, 3),
       child: InkWell(
         onTap: () async {
-          //widget.pref.jobId = job.substring(0, job.indexOf('\n'));
+          setState(() { isLoading = true;});
           widget.pref.jobId = job;
           api = APICall();
           await api.getData(widget.pref);
           setState(() {
             data = json.decode(widget.pref.jobData);
+            isLoading = false;
           });
-
           if (data['formData']['nextTubeMill'] == "" &&
               data['formData']['nextTube'] == "" &&
               data['jobFinished'] == "0") {

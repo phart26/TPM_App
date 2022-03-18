@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:tpmapp/constants/my_style.dart';
 import 'package:tpmapp/models/inspection_job_details.dart';
@@ -11,7 +11,8 @@ import 'package:tpmapp/models/number_formating.dart';
 import 'package:tpmapp/constants/routes_name.dart';
 import 'package:fraction/fraction.dart';
 
-import 'package:wifi/wifi.dart';
+// import 'package:wifi/wifi.dart';
+import 'package:wifi_iot/wifi_iot.dart';
 import 'package:ping_discover_network/ping_discover_network.dart';
 import 'package:multicast_dns/multicast_dns.dart';
 
