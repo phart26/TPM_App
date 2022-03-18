@@ -42,8 +42,7 @@ class _JobScreenState extends State<JobScreen> {
       isDataLoading = false;
       data = json.decode(widget.pref.jobData);
     });
-    // print(data);
-    // print('form datas ${data['jobsInsp']} ');
+
   }
 
   @override
