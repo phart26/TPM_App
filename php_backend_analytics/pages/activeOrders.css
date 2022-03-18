@@ -1,0 +1,397 @@
+/*Colors
+    #1F363D - Gunmetal grey
+    #40798C - Teal Blue
+    #70A9A1 - Teal Green
+    #9EC1A3 - Light Green
+    #CFE0C3 - Super Light Green (closest to white)
+    #FFE8D1 - Peach
+    #68C3D4 - Light Blue
+    #1A1A1A - Black
+
+Global
+-------------------------------------------------*/
+html{
+    opacity: 1;
+}
+
+
+
+/*
+Title
+--------------------------------------------------*/
+.title{
+    text-align: center;
+}
+
+
+
+
+/*
+Table headers
+--------------------------------------------------*/
+
+h2{
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    font-size: 80px;
+    color: #1F363D;
+    padding: 20px;
+}
+
+h3{
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    font-size: 40px;
+    color: #1F363D;
+    padding: 20px;
+}
+
+
+/*
+Table Entries
+--------------------------------------------------*/
+tbody{
+    font-size: 30px;
+}
+
+thead{
+    font-size: 24px;
+}
+
+td{
+    text-align: center;
+}
+
+
+.tableContainer{
+    margin-left: 2.5%;
+    width: 95%;
+}
+
+.brand{
+    background: #8B0000 !important;
+}
+
+.brand-text{
+    color: #8B0000 !important;
+    font-size: 30px !important;
+}
+
+#todayTitle{
+    color: red;
+}
+
+#tomorrowTitle{
+    font-size: 50px;
+}
+
+#bottomNav{
+    padding-top: 120px;
+}
+
+form{
+    width: 60%;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+label{
+    font-size: 30px;
+}
+
+#todayFont{
+    font-size: 40px;
+}
+
+.firstRow:hover{
+    background: #8B0000;
+}
+
+a:hover{
+    text-decoration: none;
+    color: black;
+}
+
+.progList{
+    font-size: 38px;
+}
+
+
+
+.display{
+    color: #8B0000;
+    padding-bottom: 30px;
+}
+
+.percent{
+    padding-right: 5px;
+}
+
+td{
+    vertical-align: middle;
+}
+
+.straightNav{
+    background: lightgrey;
+    visibility: visible;
+}
+
+.menu{
+
+    display: inline-block;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    width: 100%;
+    
+}
+
+.menu a{
+    font-size: 20px;
+    color: #8B0000;
+    margin-right: 5%;
+    
+   
+}
+
+.menu a:hover{
+    color: #1F363D;
+    border-bottom: 5px double #8B0000;
+}
+
+#desc{
+    font-size: 15px;
+}
+
+#two{
+    font-size: 20px;
+}
+
+.dataContain{
+    padding-bottom: 40px;
+}
+
+.dataTitle{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    position: relative;
+    left: 18%;
+    width: 60%;
+}
+
+
+
+#displayTitle{
+    text-align:center;
+}
+.title{
+    font-size: 80px;
+}
+
+.millTitle{
+    color: #8B0000;
+    font-size: 120px;
+    margin-top: -5%;
+    position: relative;
+    left:-23%;
+    
+}
+
+#form{
+    padding: 0;
+    display: inline;
+}
+
+.button{
+    background: #8B0000;
+    border-radius: 5px;
+    font-size: 15px;
+    color: white;
+    text-decoration: none;
+    padding: 3px 8px;
+}
+
+#millForm{
+    width: 10%;
+    display: none;
+    
+}
+
+#assignForm{
+    padding:0;
+    display: inline;
+}
+
+#startMillForm{
+    width: 10%;
+    display: none;
+    
+}
+
+label{
+    color: #8B0000; 
+}
+
+input[name="start"]{
+    display:none;
+}
+
+#shipDate{
+    width: 15%;
+}
+
+#millBtn{
+    width: 10%;
+}
+
+.reassign{
+    position: relative;
+    left: 47%;
+}
+
+.tubePerHour{
+    padding: 10px;
+    visibility: hidden;
+}
+
+#tubeJobTitle{
+    font-size: 50px;
+    visibility: hidden;
+    color: #8B0000;
+}
+
+.pdfBtn{
+    display: none;
+}
+
+#devUpdate{
+    width: 30%;
+    display: none;
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* For mobile
+------------------------------------------------*/
+
+@media screen and (max-width: 800px){
+
+
+    #OOTitle{
+        font-size: 35px;
+    }
+
+    tbody{
+        font-size: 10px;
+    }
+    
+    thead{
+        font-size: 10px;
+    }
+
+    .tableContainer{
+        margin: 0%;
+        width: 100%;
+    }
+
+    .title{
+        text-align: center;
+    }
+
+    h3{
+        font-size: 20px;
+    }
+
+    li{
+        font-size: 28px;
+    }
+
+    #mill{
+        padding-top: 20px;
+    }
+    .actButton{
+        font-size: 10px;
+    }
+
+    td{
+        font-size: 10px;
+    }
+
+    .menu{
+        padding-top: 10px;
+        padding-bottom: 10px;  
+    }
+    
+    .menu a{
+        font-size: 8px;
+        font-weight: bold;
+        margin-right: 2%; 
+    }
+    
+    .menu a:hover{
+        border-bottom: 3px double #8B0000;
+    }
+
+    #desc{
+        font-size: 8px;
+    }
+
+    .straightNav{
+        visibility: hidden;
+    }
+
+    .dataTitle{
+        left: 2.5%;
+        width: 90%;
+    }
+
+
+    .millTitle{
+        font-size: 60px;
+        left:0;
+    }
+
+    #displayTitle{
+        font-size: 22px;
+    }
+    
+
+    .button{
+        font-size: 8px;
+    }
+
+    #millForm{
+        width: 60%;
+        
+    }
+    
+    #startMillForm{
+        width: 60%;
+    }
+    .outTable{
+        padding: 10px;
+        
+    }
+
+    
+
+    #millDesc{
+        margin-left: 5%;
+    }
+
+    #tubeJob{
+        font-size: 20px;
+    }
+
+}
+
