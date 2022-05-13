@@ -187,13 +187,8 @@ class _GeoInspectionStationCheckListState
 
     //round length value to nearest 1/16"
     if (data['formData']['length'].indexOf('.') != -1) {
-      lenVal = double.parse(data['formData']['length']
-              .substring(0, data['formData']['length'].indexOf('.'))) +
-          (((double.parse(data['formData']['length']
-                          .substring(data['formData']['length'].indexOf('.'))) *
-                      16)
-                  .round()) /
-              16.0);
+      lenVal = double.parse(data['formData']['length'].substring(0, data['formData']['length'].indexOf('.'))) +
+          (((double.parse(data['formData']['length'].substring(data['formData']['length'].indexOf('.'))) * 16).round()) /16.0);
     } else {
       lenVal = double.parse(data['formData']['length']);
     }

@@ -72,6 +72,7 @@ class _TestScreenState extends State<TestScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                SizedBox(height: 5,),
                 SizedBox(width: width * 0.95, child: _getBendTestCard()),
                 SizedBox(width: width * 0.95, child: _getDriftTestCard()),
                 SizedBox(width: width * 0.95, child: _getScrapCard()),
@@ -366,14 +367,14 @@ class _TestScreenState extends State<TestScreen> {
             )),
         //body
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(5.0),
           child: Row(
             children: <Widget>[
               Expanded(
                 child:
                 Container(
                   padding:
-                  EdgeInsets.only(left: 0, right: 10, top: 0, bottom: 20),
+                  EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 10),
                   child: TextFormField(
                     onChanged: (val) {
                       if(val=='' || val == null){
@@ -393,17 +394,24 @@ class _TestScreenState extends State<TestScreen> {
                       filled: true,
                     ),
                     style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.black),
                   ),
                 ),
               ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Row(
+            children: <Widget>[
               Expanded(
                 child:
                 Container(
                   padding:
-                  EdgeInsets.only(left: 10.0, right: 10, top: 0, bottom: 20),
+                  EdgeInsets.only(left: 10.0, right: 10, top: 0, bottom: 10),
                   child: TextField(
                     onChanged: (val) {
                       if(val=='' || val == null){
@@ -423,17 +431,22 @@ class _TestScreenState extends State<TestScreen> {
                       filled: true,
                     ),
                     style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.black),
                   ),
                 ),
               ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Row(
+            children: <Widget>[
               Expanded(
-                child:
-                Container(
-                  padding:
-                  EdgeInsets.only(left: 10.0, right: 0, top: 0, bottom: 20),
+                child: Container(
+                  padding: EdgeInsets.only(left: 10.0, right: 10, top: 0, bottom: 30),
                   child: TextField(
                     onChanged: (val) {
                       if(val=='' || val == null){
@@ -453,7 +466,7 @@ class _TestScreenState extends State<TestScreen> {
                       filled: true,
                     ),
                     style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.black),
                   ),

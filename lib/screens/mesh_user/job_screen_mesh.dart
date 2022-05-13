@@ -50,30 +50,48 @@ class _MeshJobScreenState extends State<MeshJobScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
-                child: Text('No Active Jobs',
-                    style: bigFontStyle.copyWith(color: Colors.black)),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  height: 50,
-                  child: RaisedButton(
-                    color: secondaryColor,
-                    onPressed: () async {
-                      //Update the api
-                      await apiCall.getMeshJobData(widget.pref);
+              (isDataLoading) ?
+                Expanded(
+                    flex: 1,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        CircularProgressIndicator(),
+                        SizedBox(height: 20),
+                        Text('Please wait we are fetching data...')
+                      ],
+                    )
+                )
+                    :
+                Expanded( child:
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('No Active Jobs', style: bigFontStyle.copyWith(color: Colors.black)),
 
-                      setState(() {
-                        data = json.decode(widget.pref.meshJobData);
-                      });
-                    },
-                    child: Text('Refresh',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold)),
-                  ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          height: 50,
+                          child: RaisedButton(
+                            color: secondaryColor,
+                            onPressed: () async {
+                              //Update the api
+                              await apiCall.getMeshJobData(widget.pref);
+
+                              setState(() {
+                                data = json.decode(widget.pref.meshJobData);
+                              });
+                            },
+                            child: Text('Refresh',
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold)),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
                 ),
-              ),
             ],
           ),
         ),

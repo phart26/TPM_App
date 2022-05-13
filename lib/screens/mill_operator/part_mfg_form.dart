@@ -48,6 +48,7 @@ class _PartMfgFromState extends State<PartMfgFrom> {
       selCoil = coils.length > 0 ? coils[0] : '';
     } else
       coils = [];
+
     if (data['formData']['mesh'].length > 0) {
       meshs = meshsFromJson(json.encode(data['formData']['mesh']));
       selMeshTop = meshs[0];
@@ -55,6 +56,7 @@ class _PartMfgFromState extends State<PartMfgFrom> {
     } else {
       meshs = [];
     }
+
     if (data['formData']['mesh'].length > 0) {
       drainages = meshsFromJson(json.encode(data['formData']['mesh']));
       selDrainageTop = drainages[0];
@@ -62,6 +64,7 @@ class _PartMfgFromState extends State<PartMfgFrom> {
     } else {
       drainages = [];
     }
+
     if (data['formData'] != null)
       FLog.info(
           text:
@@ -219,10 +222,15 @@ class _PartMfgFromState extends State<PartMfgFrom> {
                             }
                           }
                         };
-                        await api.postTubeData(map);
 
-                        Navigator.of(context)
-                            .pushReplacementNamed(Routes.testScreen);
+                        Map<String, dynamic> res = await api.postTubeData(map);
+
+                        if(res['first_tube_reg'] == true){
+                          Navigator.of(context).pushReplacementNamed(Routes.testScreen);
+                        }else{
+                          Navigator.of(context).pushReplacementNamed(Routes.weldingForm);
+                        }
+
                       }
                     } else {
                       Map<String, dynamic> map = {
@@ -232,14 +240,18 @@ class _PartMfgFromState extends State<PartMfgFrom> {
                             "setup_op": "${widget.pref.userDetails.userId}",
                             "qty": data['formData']['quantity'],
                             "new_coil": 1,
-                            "coil": selCoil.coilNo,
+                            "coil": (selCoil.coilNo?.isEmpty ? 0 : selCoil.coilNo),
                           }
                         }
                       };
-                      await api.postTubeData(map);
 
-                      Navigator.of(context)
-                          .pushReplacementNamed(Routes.testScreen);
+                      Map<String, dynamic> res = await api.postTubeData(map);
+
+                      if(res['first_tube_reg'] == true){
+                        Navigator.of(context).pushReplacementNamed(Routes.testScreen);
+                      }else{
+                        Navigator.of(context).pushReplacementNamed(Routes.weldingForm);
+                      }
                     }
                   },
                   color: primaryColor,
@@ -389,8 +401,7 @@ class _PartMfgFromState extends State<PartMfgFrom> {
                       Expanded(child:
                         SizedBox(
                           width: width * 0.45,
-                          child: Text("Start Angle: " + startAngle.toString(),
-                              style: bigFontStyle)),
+                          child: Text("Start Angle: ${ startAngle.isNaN ? '0.0' : startAngle.toString() }", style: bigFontStyle)),
                       ),
                       Expanded(child:
                         SizedBox(

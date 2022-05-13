@@ -639,8 +639,7 @@ class _InspectionStationCheckListState
                                       await api.getData(widget.pref);
                                       data = json.decode(widget.pref.jobData);
 
-                                      if (data['formData']['nextTubeInsp'] ==
-                                          "") {
+                                      if (data['formData']['nextTubeInsp'] == "") {
                                         tubeAvail = false;
                                       } else {
                                         // //check if nextTube is an additional scrap tube to update remaining tubes
@@ -658,15 +657,10 @@ class _InspectionStationCheckListState
                                         //   widget.pref.currentTube++;
                                         // }
 
-                                        widget.pref.currentTubeNo =
-                                            data['formData']['nextTubeInsp'];
+                                        widget.pref.currentTubeNo = data['formData']['nextTubeInsp'];
 
                                         widget.pref.currentTube = int.parse(
-                                            widget.pref.currentTubeNo.substring(
-                                                widget.pref.currentTubeNo
-                                                        .indexOf('-') +
-                                                    1));
-
+                                            widget.pref.currentTubeNo.substring(widget.pref.currentTubeNo.indexOf('-') + 1));
                                         tubeAvail = true;
                                       }
 

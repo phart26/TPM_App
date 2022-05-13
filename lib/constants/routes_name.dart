@@ -12,8 +12,7 @@ class Routes {
   static const geoformSelectionScreen = "/geo_form_selection_screen";
   static const finalInspectionGeoForm = "/final_inspection_geo_form";
   static const inspectionStationCheckSheet = "/inspection_station_check_sheet";
-  static const geoInspectionStationCheckSheet =
-      "/geo_inspection_station_check_sheet";
+  static const geoInspectionStationCheckSheet = "/geo_inspection_station_check_sheet";
   static const directPackInspection = "/direct_pack_inspection";
   static const cutoffStationCheckSheet = "/cutoff_station_check_sheet";
   static const geoCutoffStationCheckSheet = "/geo_cutoff_station_check_sheet";

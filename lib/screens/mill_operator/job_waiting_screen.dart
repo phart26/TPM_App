@@ -95,11 +95,11 @@ class _JobWaitingScreenState extends State<JobWaitingScreen> {
             data = json.decode(widget.pref.jobData);
             isLoading = false;
           });
+          //Fix this
           if (data['formData']['nextTubeMill'] == "" &&
               data['formData']['nextTube'] == "" &&
               data['jobFinished'] == "0") {
-            Navigator.of(context)
-                .pushReplacementNamed(Routes.tubeMillSetupForm);
+            Navigator.of(context).pushReplacementNamed(Routes.tubeMillSetupForm);
           } else {
             Navigator.of(context).pushReplacementNamed(Routes.weldingForm);
           }

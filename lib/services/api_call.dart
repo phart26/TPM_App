@@ -56,21 +56,12 @@ class APICall {
       if (res == null || res.length == 0){
         res = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJsb2NhbGhvc3QiLCJpYXQiOjE1OTc4MzE0OTAsIm5iZiI6MTU5NzgzMTQ5MCwiYXVkIjoibXl1c2VycyIsInVzZXJfZGF0YSI6eyJ1c2VybmFtZSI6IlByZXN0b24iLCJwYXNzd29yZCI6IkhhcnRwcmUxMyJ9fQ.MuIJ9S0rGpdMEs3w8UYCr98c-AqaKpgnYovubl52gEmPgJ08vMSBV1kdKprNLYIzEwU2M3uOoMaCW27zflmbCg";
       }else if (!response.body.contains("User not Found!")) {
-        // await deviceInfo(res["token"]);
-        // pref.token = res["token"];
-        // pref.userDetails = res;
+
         final fetchToken = fetchTokenFromJson(response.body);
         await deviceInfo(fetchToken.token);
         pref.token = fetchToken.token;
         pref.userDetails = fetchToken;
       }
-      // else if (!response.body.contains("User not Found!")) {
-      //   final fetchToken = fetchTokenFromJson(response.body);
-      //   await deviceInfo(fetchToken.token);
-      //   pref.token = fetchToken.token;
-      //   pref.userDetails = fetchToken;
-      // }
-
 
     } catch (e) {
       print(' exception on getJSONToken xxx $e');
@@ -113,10 +104,12 @@ class APICall {
       if (pref.token == "") await getJSONToken(pref, "");
 
       String path = "TPM_Forms_Test/API/jobReturn.php?userToken=${pref.token}&mac_add=$device_id";
+      print(Uri.parse(baseURL + path));
+
       Response response = await client.get(Uri.parse(baseURL + path), headers: {
         "Accept": "application/json",
       });
-      print('response from the getData ${response.body} ${response.headers} ');
+      print('response from the getJobDetails ${response.body} ${response.headers} ');
       var res = jsonDecode( response.body );
       return res["body"];
     } catch (e) {
@@ -128,18 +121,12 @@ class APICall {
     try {
       String device_id = await PlatformDeviceId.getDeviceId;
       if (pref.token == "") await getJSONToken(pref, "");
-      // Response response = await get(
-      //     Uri.http(baseURL,
-      //         'TPM_Forms_Test/API/jobReturnStamping.php?userToken=${pref.token}&mac_add=$device_id'),
-      //     headers: {
-      //       'cache-control': "no-cache",
-      //       "postman-token": "a0c90a53-6f9c-1dfe-4802-f209ca76ecd6"
-      //     });
+
       String path = "TPM_Forms_Test/API/jobReturnStamping.php?userToken=${pref.token}&mac_add=$device_id";
       Response response = await client.get(Uri.parse(baseURL + path), headers: {
         "Accept": "application/json",
       });
-      print('response from the getData ${response.body} ${response.headers} ');
+      print('response from the getJobDetailsStamping ${response.body} ${response.headers} ');
       var res = response.body;
       res = (res.split("[body] => "))[1];
       res = (res.split(")"))[0];
@@ -170,13 +157,7 @@ class APICall {
   getCoilsStamp(PreferencesService pref) async {
     try {
       if (pref.token == "") await getJSONToken(pref, "");
-      // Response response = await get(
-      //     Uri.http(baseURL,
-      //         'TPM_Forms_Test/API/getCoilsStamp.php?userToken=${pref.token}&job=${pref.jobId}'),
-      //     headers: {
-      //       'cache-control': "no-cache",
-      //       "postman-token": "a0c90a53-6f9c-1dfe-4802-f209ca76ecd6"
-      //     });
+
       String path = "TPM_Forms_Test/API/getCoilsStamp.php?userToken=${pref.token}&job=${pref.jobId}";
       Response response = await client.get(Uri.parse(baseURL + path), headers: {
         "Accept": "application/json",
@@ -195,7 +176,7 @@ class APICall {
   getData(PreferencesService pref) async {
     try {
       if (pref.token == "") await getJSONToken(pref, "");
-      if (pref.jobId == "") pref.jobId = '7731';
+      if (pref.jobId == "") pref.jobId = '7791';
       print(APICall.baseURL +
           'TPM_Forms_Test/API/order_json_output.php?page1=tube_mill_setup&page3=worksheet&page4=cutoff_station_check_sheet&page5=geo_form_ring_concentric_inspection&page6=geo_form_ring_inspection&page7=inspection_rpt&page8=ring_station_check_list&page9=welding_station_check_list&page10=dp_inspection&page11=Mill_station_first_part&page12=first_part_drift_confirmation&page13=final_inspection_geo_form&userToken=${pref.token}&job=${pref.jobId}');
 
@@ -213,15 +194,8 @@ class APICall {
 
   getDataStamping(PreferencesService pref) async {
     try {
-      print(APICall.baseURL +
-          'TPM_Forms_Test/API/getStampingJobData.php?userToken=${pref.token}&job=${pref.jobId}');
-      // Response response = await get(
-      //     Uri.http(baseURL,
-      //         'TPM_Forms_Test/API/getStampingJobData.php?userToken=${pref.token}&job=${pref.jobId}'),
-      //     headers: {
-      //       'cache-control': "no-cache",
-      //       "postman-token": "a0c90a53-6f9c-1dfe-4802-f209ca76ecd6"
-      //     });
+      print(APICall.baseURL + 'TPM_Forms_Test/API/getStampingJobData.php?userToken=${pref.token}&job=${pref.jobId}');
+
       String path = "TPM_Forms_Test/API/getStampingJobData.php?userToken=${pref.token}&job=${pref.jobId}";
       Response response = await client.get(Uri.parse(baseURL + path), headers: {
         "Accept": "application/json",
@@ -240,12 +214,7 @@ class APICall {
   getGeoJobData(PreferencesService pref) async {
     try {
       if (pref.token == "") await getJSONToken(pref, "");
-      // Response response = await get(
-      //     Uri.http(baseURL, 'TPM_Forms_Test/API/geoJobs.php?userToken=${pref.token}'),
-      //     headers: {
-      //       'cache-control': "no-cache",
-      //       "postman-token": "a0c90a53-6f9c-1dfe-4802-f209ca76ecd6"
-      //     });
+
       String path = "TPM_Forms_Test/API/geoJobs.php?userToken=${pref.token}";
       Response response = await client.get(Uri.parse(baseURL + path), headers: {
         "Accept": "application/json",
@@ -264,13 +233,7 @@ class APICall {
   getGeoTubes(PreferencesService pref, String sheet) async {
     try {
       if (pref.token == "") await getJSONToken(pref, "");
-      // Response response = await get(
-      //     Uri.http(baseURL,
-      //         'TPM_Forms_Test/API/geoTubes.php?userToken=${pref.token}&sheet=${sheet}&job=${pref.jobId}'),
-      //     headers: {
-      //       'cache-control': "no-cache",
-      //       "postman-token": "a0c90a53-6f9c-1dfe-4802-f209ca76ecd6"
-      //     });
+
       String path = "TPM_Forms_Test/API/geoTubes.php?userToken=${pref.token}&sheet=${sheet}&job=${pref.jobId}";
       Response response = await client.get(Uri.parse(baseURL + path), headers: {
         "Accept": "application/json",
@@ -289,13 +252,7 @@ class APICall {
   getMeshJobData(PreferencesService pref) async {
     try {
       if (pref.token == "") await getJSONToken(pref, "");
-      // Response response = await get(
-      //     Uri.http(baseURL,
-      //         'TPM_Forms_Test/API/meshJobs.php?userToken=${pref.token}'),
-      //     headers: {
-      //       'cache-control': "no-cache",
-      //       "postman-token": "a0c90a53-6f9c-1dfe-4802-f209ca76ecd6"
-      //     });
+
       String path = "TPM_Forms_Test/API/meshJobs.php?userToken=${pref.token}";
       Response response = await client.get(Uri.parse(baseURL + path), headers: {
         "Accept": "application/json",
@@ -314,13 +271,7 @@ class APICall {
   getMeshData(PreferencesService pref) async {
     try {
       if (pref.token == "") await getJSONToken(pref, "");
-      // Response response = await get(
-      //     Uri.http(baseURL,
-      //         'TPM_Forms_Test/API/getMeshCoil.php?userToken=${pref.token}&po=${pref.meshJobPo}'),
-      //     headers: {
-      //       'cache-control': "no-cache",
-      //       "postman-token": "a0c90a53-6f9c-1dfe-4802-f209ca76ecd6"
-      //     });
+
       String path = "TPM_Forms_Test/API/getMeshCoil.php?userToken=${pref.token}&po=${pref.meshJobPo}";
       Response response = await client.get(Uri.parse(baseURL + path), headers: {
         "Accept": "application/json",
@@ -347,11 +298,6 @@ class APICall {
     try {
       print('postTestResults $map ${jsonEncode(map)}');
 
-      // Response response = await post(
-      //     Uri.http(baseURL, "TPM_Forms_Test/API/bend_drift.php"),
-      //   body: json.encode(map),
-      //   headers: {"Content-Type": "application/json"},
-      // );
       String path = "TPM_Forms_Test/API/bend_drift.php";
       Response response = await client.post(Uri.parse(baseURL + path),
           headers: {
@@ -378,11 +324,6 @@ class APICall {
       };
     try {
       print('postScarp $map ${jsonEncode(map)}');
-      // Response response = await post(
-      //     Uri.http(baseURL, "TPM_Forms_Test/API/scrap.php"),
-      //   body: json.encode(map),
-      //   headers: {"Content-Type": "application/json"},
-      // );
 
       String path = "TPM_Forms_Test/API/scrap.php";
       Response response = await client.post(Uri.parse(baseURL + path),
@@ -429,11 +370,6 @@ class APICall {
   postEndCoilStamping(Map map) async {
     try {
       print('postEndCoil $map ${jsonEncode(map)}');
-      // Response response = await post(
-      //     Uri.http(baseURL, "TPM_Forms_Test/API/endCoilStamping.php"),
-      //   body: json.encode(map),
-      //   headers: {"Content-Type": "application/json"},
-      // );
 
       String path = "TPM_Forms_Test/API/endCoilStamping.php";
       Response response = await client.post(Uri.parse(baseURL + path),
@@ -503,20 +439,15 @@ class APICall {
   postTubeData(Map map) async {
     try {
       print('postTubeData $map ${jsonEncode(map)}');
-      // Response response = await post(
-      //     Uri.http(baseURL, "TPM_Forms_Test/API/tube_data.php"),
-      //   body: json.encode(map),
-      //   headers: {"Content-Type": "application/json"},
-      // );
 
       String path = "TPM_Forms_Test/API/tube_data.php";
       Response response = await client.post(Uri.parse(baseURL + path),
-          headers: {
-            "Accept": "application/json",
-          },
+          headers: { "Accept": "application/json" },
           body: json.encode(map));
 
       print('postTubeData ${response.body}');
+
+      return json.decode(response.body);
     } catch (e) {
       print('exception on  postScarp $e');
     }

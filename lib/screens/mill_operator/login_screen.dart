@@ -37,6 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     CircularProgressIndicator(),
+                    SizedBox(height: 20),
                     Text('Please wait we are fetching data...')
                   ],
                 )))

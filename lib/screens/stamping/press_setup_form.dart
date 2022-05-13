@@ -175,8 +175,7 @@ class _PressSetupFormState extends State<PressSetupForm> {
                   width: width * 0.9,
                   child: RaisedButton(
                     onPressed: () {
-                      widget.pref.jobStarted = DateFormat('dd-MM-yyyy hh:mm a')
-                          .format(DateTime.now());
+                      widget.pref.jobStarted = DateFormat('dd-MM-yyyy hh:mm a').format(DateTime.now());
                       setState(() {
                         isStarted = 1;
                       });

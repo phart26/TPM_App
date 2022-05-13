@@ -95,16 +95,29 @@ class _JobScreenGeoState extends State<JobScreenGeo> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 15),
-                      SizedBox(height: 15),
+                      SizedBox(height: 40),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox(
-                            child: Text('No Active Jobs',
-                                style:
-                                    bigFontStyle.copyWith(color: Colors.black)),
-                          ),
+                          (isDataLoading) ?
+                            Expanded(
+                                flex: 1,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    CircularProgressIndicator(),
+                                    SizedBox(height: 20),
+                                    Text('Please wait we are fetching data...')
+                                  ],
+                                )
+                            )
+                            :
+                            Expanded(child:
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [Text('No Active Jobs', style: bigFontStyle.copyWith(color: Colors.black))],
+                              )
+                            ),
                         ],
                       ),
                     ],

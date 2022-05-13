@@ -43,11 +43,23 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
               child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Container(
+                height: 80,
+                margin: EdgeInsets.only(bottom: 5,left:30,right:30),
+                padding: EdgeInsets.only(left:10,right:10),
+                child: Image.asset("assets/icon/logo.png"),
+              ),
+              SizedBox( height: 10 ),
               widget.pref.millName == ""
                   ? Text('Device not connected')
                   : Text(
                       'This device is connected with :${widget.pref.millName}'),
-              RaisedButton(
+              SizedBox( height: 10 ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(230, 40),
+                    maximumSize: const Size(250, 40)
+                ),
                 onPressed: () {
                   if (widget.pref.millName == "") {
                     Flushbar(
@@ -65,9 +77,13 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                 child: Text('Mill operator mode', style: bigBoldFontStyle),
               ),
               SizedBox(
-                height: 15,
-              ),
-              RaisedButton(
+                height: 20,
+              ),              
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(230, 40),
+                    maximumSize: const Size(250, 40)
+                ),
                 onPressed: () {
                   widget.pref.mode = 2;
                   Navigator.of(context)
@@ -76,9 +92,13 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                 child: Text('Inspection user mode', style: bigBoldFontStyle),
               ),
               SizedBox(
-                height: 15,
+                height: 20,
               ),
-              RaisedButton(
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(230, 40),
+                  maximumSize: const Size(250, 40)
+                ),
                 onPressed: () {
                   widget.pref.mode = 4;
                   Navigator.of(context)
@@ -87,9 +107,13 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                 child: Text('GeoForm mode', style: bigBoldFontStyle),
               ),
               SizedBox(
-                height: 15,
+                height: 20,
               ),
-              RaisedButton(
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(230, 40),
+                    maximumSize: const Size(250, 40)
+                ),
                 onPressed: () {
                   widget.pref.mode = 3;
                   Navigator.of(context)
@@ -98,9 +122,13 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                 child: Text('Mesh jobs mode', style: bigBoldFontStyle),
               ),
               SizedBox(
-                height: 15,
+                height: 20,
               ),
-              RaisedButton(
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(230, 40),
+                    maximumSize: const Size(250, 40)
+                ),
                 onPressed: () {
                   widget.pref.mode = 5;
                   Navigator.of(context)
@@ -109,9 +137,13 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                 child: Text('Stamping mode', style: bigBoldFontStyle),
               ),
               SizedBox(
-                height: 15,
+                height: 20,
               ),
-              RaisedButton(
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(230, 40),
+                    maximumSize: const Size(250, 40)
+                ),
                 onPressed: () {
                   widget.pref.mode = 6;
                   Navigator.of(context)
@@ -120,9 +152,13 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                 child: Text('Steel Receiving', style: bigBoldFontStyle),
               ),
               SizedBox(
-                height: 15,
+                height: 20,
               ),
-              RaisedButton(
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(230, 40),
+                    maximumSize: const Size(250, 40)
+                ),
                 onPressed: () {
                   Navigator.of(context)
                       .pushReplacementNamed(Routes.deviceSetupScreen);
@@ -130,7 +166,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                 child: Text('Setup Device', style: bigBoldFontStyle),
               ),
               SizedBox(
-                height: 15,
+                height: 20,
               ),
             ],
           ))),

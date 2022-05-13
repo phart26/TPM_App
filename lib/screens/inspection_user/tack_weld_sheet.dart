@@ -320,8 +320,7 @@ class _TackWeldSheetState extends State<TackWeldSheet> {
                       child: RaisedButton(
                         color: primaryColor,
                         onPressed: () async {
-                          if ((_fromTube.text.isNotEmpty &&
-                              _toTube.text.isNotEmpty)) {
+                          if ((_fromTube.text.isNotEmpty && _toTube.text.isNotEmpty)) {
                             Map<String, dynamic> map = {
                               "tubeData": {
                                 "tack_weld_checksheet": {
@@ -341,7 +340,7 @@ class _TackWeldSheetState extends State<TackWeldSheet> {
                             data = json.decode(widget.pref.jobData);
 
                             clearForm();
-                            setState(() {});
+                            // setState(() {});
 
                             //check if tack_weld job is finished
                             if (int.parse(data['tubesTac']) == 0) {
