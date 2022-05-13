@@ -92,18 +92,31 @@ if(isset($_GET['userToken'])){
             array_push($pages, $_GET['page15']);
         }
 
-        $sql = "UPDATE orders_tbl SET has_started = 1 WHERE job = $job";
+        //Check the job exist or not
+        $checkQl = "SELECT count(*) as CNT FROM orders_tbl WHERE job = $job";
+        $checkRes = $conn -> query($checkQl);
 
-        //make query & get result
-        if ($result= $conn -> query($sql)) {
+        $isExist = mysqli_fetch_assoc($checkRes);
+        if ($isExist['CNT'] == 0) {
+            echo json_encode(['status_code_header' => 404,
+                          'body'               => "Not exist job_id: $job"
+                        ]);    
+        }else{
             
+            $sql = "UPDATE orders_tbl SET has_started = 1 WHERE job = $job";
+    
+            //make query & get result
+            if ($result= $conn -> query($sql)) {
+                
+            }
+    
+            $result = processRequest($pages, $_SERVER['REQUEST_METHOD'], $job);
+    
+            echo json_encode(['status_code_header' => $result["status_code_header"],
+                              'body'               => json_decode($result["body"])
+                            ]);
         }
 
-        $result = processRequest($pages, $_SERVER['REQUEST_METHOD'], $job);
-
-        echo json_encode(['status_code_header' => $result["status_code_header"],
-                          'body'               => json_decode($result["body"])
-                        ]);
         exit;
 
     }catch(Exception $ex){

@@ -4,7 +4,7 @@
     include '../Connections/connectionTPM.php';
 
 
-    $sql = "SELECT * FROM coil_tbl WHERE job = $job AND allocated = 1";
+    $sql = "SELECT * FROM coil_tbl WHERE job = $job AND allocated = 1";    
 
     //make query & get result
     if ($result= $conn -> query($sql)) {

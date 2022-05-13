@@ -1,17 +1,23 @@
 <?php
-    $numTubes = sizeof($tubes);
-    $numPages = ceil($numTubes/6);
-    $from = 0;
-    $to = 6;
+   $numTubes = sizeof($tubes);
+   $from = 0;
+   $to;
+   if($numTubes < 12){
+       $to = $numTubes;
+   }else{
+       $to = 11;
+   }
+   $numPages = ceil($numTubes/$to);
+   
 
-    while($numPages > 0){
+   while($numPages > 0){
 ?>
 <div id="pagebreak" class="pagebreak">
         
 <div class="titleImg">
             <h2>
                 <strong>TPM Excluder Ring Check Sheet</strong>
-                <div class="image"> <img src="logo_tpm.jpeg"></div>
+                <div class="image"> <img src="/opt/bitnami/apache2/htdocs/TPM-master/TPM_Forms/pages/logo_tpm.jpeg"></div>
             </h2>
         </div>
         
@@ -19,13 +25,13 @@
             <tr>
                 <td style="width : 30%">Job#: <?= $job ?></td>
                 <td style="width : 30%">PO#: <?= $orderACT['po'] ?></td>
-                <td style="width : 30%">Average Ring ID: <?= $partSpec['ring_min'] ?></td>
+                <td style="width : 30%">Average Ring ID: <?php echo ($partSpec['ring1_min_input'] > 0 ? $partSpec['ring1_min_input'] : $partSpec['ring2_min_input']); ?></td>
             </tr>
             
             <tr>
                 <td></td>
                 <td></td>
-                <td>To : <?= $partSpec['ring_max'] ?></td>
+                <td>To : <?php echo ($partSpec['ring1_max_input'] > 0 ? $partSpec['ring1_max_input'] : $partSpec['ring2_max_input']); ?></td>
             </tr>
             
             <tr>
@@ -35,7 +41,7 @@
             </tr>
             
             <tr>
-                <td>Date Started: <?= $orderACT['start_time'] ?></td> 
+                <td>Date Started: <?= $orderACT['began'] ?></td> 
             </tr>
             
             <tr>
@@ -44,7 +50,7 @@
         </table>
        
         <p class="pad-b-20">
-            Date Tubes inspected<?= date('Y-m-d', strtotime($tubes[$from]['insp_time']))?> to <?= date('Y-m-d', strtotime($tubes[$to-1]['insp_time']))?>
+            Date Tubes inspected: <?= date('Y-m-d', strtotime($tubes[$from]['ring_end_time']))?> to <?= date('Y-m-d', strtotime($tubes[$to-1]['ring_end_time']))?>
         </p>
         
         <table class="summary-table">
@@ -111,7 +117,7 @@
 <?php 
    $numPages--;
    $from = $to;
-   $to += 6;
+   $to += 11;
     }
 
 ?>

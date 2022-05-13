@@ -12,7 +12,7 @@
                 <h2 class="title">
                     <strong>TPM GeoForm Ring Inspection</strong>
                 </h2>
-                <div class="image"> <img src="logo_tpm.jpeg"></div>
+                <div class="image"> <img src="/opt/bitnami/apache2/htdocs/TPM-master/TPM_Forms/pages/logo_tpm.jpeg"></div>
         </div>
         
         <table class="header margin-b-20">

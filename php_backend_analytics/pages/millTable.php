@@ -1,149 +1,61 @@
 
 <!-- Displays the active and pending jobs for each mill-->
-
 <?php
+    $header_tilte = "Mill Jobs";
     include '../Connections/connectionTPM.php';
+    include 'header.php';
 ?>
-
 <?php
+    function getScrap($mill){
+        include '../Connections/connectionTPM.php';
 
-    //write query for all orders
-    $sql = 'SELECT * FROM orders_tbl WHERE device = "mill_01" AND has_finished = 0';
+        $sql = 'SELECT * FROM scrap_tbl WHERE job = "'.$mill[0]['job'].'"';
 
-    //make query & get result
-    if ($result= $conn -> query($sql)) {
-	}
-	
+        //make query & get result
+        $result= $conn -> query($sql);
 
-    $millOne = array();
-    //fetch resulting rows as an array
-    while($order = mysqli_fetch_array($result)){
-        $millOne[] = $order;
+        $millScrap = array();
+        while($order = mysqli_fetch_array($result)){
+            $millScrap[] = $order;
+        }
+
+        $sql = 'SELECT * FROM part_tbl WHERE part = "'.$mill[0]['part'].'"';
+
+        //make query & get result
+        $result= $conn -> query($sql);
+
+        if(!empty($result)){
+            $millPart = mysqli_fetch_array($result);
+    
+            $millTotalScrap = 0;
+    
+            foreach ($millScrap as $tube){
+                $millTotalScrap += intval($tube['tube_length']);
+            }
+    
+            if($mill[0]['quantity']*$millPart['cutoff_length']*1 == 0){
+                $millScrRate = 0;
+            }else{
+                $millScrRate = round(($millTotalScrap / (floatval($mill[0]['quantity'])*floatval($millPart['cutoff_length']))) * 100, 1);
+            }
+
+            return $millScrRate;
+        }else{
+            return 0;
+        }
     }
 
-    //write query for all orders
-    $sql = 'SELECT * FROM orders_tbl WHERE device = "mill_02"  AND has_finished = 0';
-
-    //make query & get result
-    if ($result= $conn -> query($sql)) {
-	
-	}
-	
-
-    $millTwo = array();
-    //fetch resulting rows as an array
-    while($order = mysqli_fetch_array($result)){
-        $millTwo[] = $order;
-    }
-
-    //write query for all orders
-    $sql = 'SELECT * FROM orders_tbl WHERE device = "mill_03"  AND has_finished = 0';
-
-    //make query & get result
-    if ($result= $conn -> query($sql)) {
-	
-	}
-	
-
-    $millThree = array();
-    //fetch resulting rows as an array
-    while($order = mysqli_fetch_array($result)){
-        $millThree[] = $order;
-    }
-
-    //write query for all orders
-    $sql = 'SELECT * FROM orders_tbl WHERE device = "mill_04"  AND has_finished = 0';
-
-    //make query & get result
-    if ($result= $conn -> query($sql)) {
-	
-	}
-	
-
-    $millFour = array();
-    //fetch resulting rows as an array
-    while($order = mysqli_fetch_array($result)){
-        $millFour[] = $order;
-    }
-
-    //write query for all orders
-    $sql = 'SELECT * FROM orders_tbl WHERE device = "mill_05"  AND has_finished = 0';
-
-    //make query & get result
-    if ($result= $conn -> query($sql)) {
-	
-	}
-	
-
-    $millFive = array();
-    //fetch resulting rows as an array
-    while($order = mysqli_fetch_array($result)){
-        $millFive[] = $order;
+    function getResultWithQuery($con, $sql){
+        if(empty($con)) return false;
+        
+        $result = $con->query($sql);
+        $data = [];
+        while($item = mysqli_fetch_array($result)){
+            $data[] = $item;
+        }
+        return $data;
     }
 ?>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-   "http://www.w3.org/TR/html4/loose.dtd">
-
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="description" content="Table display for out going TPM orders for the next two weeks">
-        <meta name="viewport" content="width=device-width, initial-scale = 1.0">        
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
-        <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-        <script src = "https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-        <script src = "https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
-
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-        <link rel = "stylesheet" href = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
-        <link rel = "stylesheet" href = "millStylesheet.css">
-        <link rel = "stylesheet" href = "hamburger.css">
-        <link rel = "stylesheet" href = "https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" />
-        <link href = "https://fonts.googleapis.com/css?family=Merriweather|Playfair+Display|Raleway:400,700|Vollkorn:700&display=swap" rel="stylesheet">
-
-        <title>Mill Jobs</title>
-    </head>
-  <body>
-       <!-- nav bar -->
-   <div class="navBar">
-        <div class="nav-toggle">
-            <div class="nav-toggle-bar"></div>
-        </div>
-
-        <nav id="nav" class="nav">
-            <ul>
-                <li><h3><a href="upcomingOrders.php" id="two">Upcoming Orders</a></h3></li>
-                <li><h3><a href="../../TPM_Orders/todTomOrders.php" id="two" >Shipping Today &nbsp</a></h3></li>
-                <!-- <li><h3><a href="../../TPM_Orders/viewOrders.php" id="two">All Orders &nbsp &nbsp &nbsp &nbsp &nbsp</a></h3></li> -->
-                <li><h3><a href="index.php" id="two">All Orders &nbsp &nbsp &nbsp &nbsp &nbsp</a></h3></li>
-            </ul>
-        </nav>
-    </div>
-    <script>
-        (function() {
-
-            let hamburger = {
-                nav: document.querySelector('#nav'),
-                navToggle: document.querySelector('.nav-toggle'),
-
-                initialize() {
-                    this.navToggle.addEventListener('click',
-                () => { this.toggle(); });
-                },
-
-                toggle() {
-                    this.navToggle.classList.toggle('expanded');
-                    this.nav.classList.toggle('expanded');
-                },
-            };
-
-            hamburger.initialize();
-
-        }());
-    </script>
-
     <?php
         
         function getCustomer($cust_id){
@@ -163,248 +75,53 @@
     ?>
 
     <?php
-         //write query for all orders
-        $sql = 'SELECT * FROM orders_tbl WHERE device = "mill_01"  AND has_finished = 0';
-
-        //make query & get result
-        if ($result= $conn -> query($sql)) {
-        }
-        
-
-        $millUno = array();
-        $millUno = mysqli_fetch_assoc($result);
-        
+        //get the full mills 
+        $mills = getResultWithQuery($conn, "SELECT * FROM mac_add_tbl WHERE device LIKE 'mill_%' ORDER BY device ASC");
     ?>
 
-    <div class="center">
-        <div class= "allTablesOTT">
-            <div class="tableContainerOTT">
-                <div class ="millTitle">
-                        <h2><b><?php echo (!empty($millUno) ?"<a id='millLink' href='displayProg.php?company=".getCustomer($millUno['cust_id'])."&quantity=".$millUno['quantity']."&job=".$millUno['job']."'>" . 'Mill 1' . "</a> ": "Mill 1"); ?></b></h2>
-                </div>
-                <div class="millTable">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <td>Job #</td>
-                                <td>OD</td>
-                                <td>Status</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach($millOne as $order): 
-                                // getting od from part_tbl
-                                $sql = "SELECT * FROM part_tbl WHERE part = '".$order['part']."' AND is_od = 1";
-                                $odUno = array();
-                                $dim = 0;
-                                //make query & get result
-                                if ($result= $conn -> query($sql)) {
-
-                                    $odUno = mysqli_fetch_assoc($result);
-                                    
-                                    if(mysqli_num_rows($result) == 0){
-                                        $sql = 'SELECT * FROM part_tbl WHERE part = "'.$order['part'].'"';
-                                        $part_row = array();
-                                        if ($result= $conn -> query($sql)) {
-                                            $part_row = mysqli_fetch_assoc($result);
-                                            $sql = 'SELECT * FROM gage_tbl WHERE gage = "'.$part_row['gage'].'"';
-                                            if ($result= $conn -> query($sql)) {
-                                                $odUno = mysqli_fetch_assoc($result);
-                                            }
-
-                                            $dim = $part_row['dim'] + 2*($odUno['thickness']);
-                                        }
-                                    }else{
-                                        $dim = $odUno['dim'];
-                                    }
-
-                                }?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($order['job']); ?></td>
-                                        <td><?php echo htmlspecialchars($dim); ?></td>
-                                        <td><?php echo ($order['has_started'] == 1 ? 'ACTIVE' : 'Pending'); ?></td>
-                                    </tr> 
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            <?php
-                //write query for all orders
-                $sql = 'SELECT * FROM orders_tbl WHERE device = "mill_02"  AND has_finished = 0';
-
-                //make query & get result
-                if ($result= $conn -> query($sql)) {
-                }
-                
-
-                $millDos = array();
-                $millDos = mysqli_fetch_assoc($result);
-                
-            ?>
-
-            <div class="tableContainerOTT">
-            <div class ="millTitle">
-                        <h2><b><?php echo (!empty($millDos) ?"<a id='millLink' href='displayProg.php?company=".getCustomer($millDos['cust_id'])."&quantity=".$millDos['quantity']."&job=".$millDos['job']."'>" . 'Mill 2' . "</a> " : "Mill 2"); ?></b></h2>
-                </div>
-                <div class="millTable">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <td>Job #</td>
-                                <td>OD</td>
-                                <td>Status</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach($millTwo as $order):
-                                // getting od from part_tbl
-                                $sql = "SELECT * FROM part_tbl WHERE part = '".$order['part']."' AND is_od = 1";
-                                $odDos = array();
-                                $dim = 0;
-                                //make query & get result
-                                if ($result= $conn -> query($sql)) {
-
-                                    $odDos = mysqli_fetch_assoc($result);
-                                    
-                                    if(mysqli_num_rows($result) == 0){
-                                        $sql = 'SELECT * FROM part_tbl WHERE part = "'.$order['part'].'"';
-                                        $part_row = array();
-                                        if ($result= $conn -> query($sql)) {
-                                            $part_row = mysqli_fetch_assoc($result);
-                                            $sql = 'SELECT * FROM gage_tbl WHERE gage = "'.$part_row['gage'].'"';
-                                            if ($result= $conn -> query($sql)) {
-                                                $odDos = mysqli_fetch_assoc($result);
-                                            }
-
-                                            $dim = $part_row['dim'] + 2*($odDos['thickness']);
-                                        }
-                                    }else{
-                                        $dim = $odDos['dim'];
-                                    }
-
-                                }?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($order['job']); ?></td>
-                                        <td><?php echo htmlspecialchars($dim); ?></td>
-                                        <td><?php echo ($order['has_started'] == 1 ? 'ACTIVE' : 'Pending'); ?></td>
-                                    </tr> 
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            <?php
-                //write query for all orders
-                $sql = 'SELECT * FROM orders_tbl WHERE device = "mill_03"  AND has_finished = 0';
-
-                //make query & get result
-                if ($result= $conn -> query($sql)) {
-                }
-                
-
-                $millTrec = array();
-                $millTrec = mysqli_fetch_assoc($result);
-
-                
-      
-            ?>
-
-            <div class="tableContainerOTT" id= "millTT" >
-            <div class ="millTitle" >
-                        <h2><b><?php echo (!empty($millTrec) ?"<a id='millLink' href='displayProg.php?company=".getCustomer($millTrec['cust_id'])."&quantity=".$millTrec['quantity']."&job=".$millTrec['job']."'>" . 'Mill 3' . "</a> " : "Mill 3"); ?></b></h2>
-                </div>
-                <div class="millTable">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <td>Job #</td>
-                                <td>OD</td>
-                                <td>Status</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach($millThree as $order): 
-                                // getting od from part_tbl
-                                $sql = "SELECT * FROM part_tbl WHERE part = '".$order['part']."' AND is_od = 1";
-                                $odTrec = array();
-                                $dim = 0;
-                                //make query & get result
-                                if ($result= $conn -> query($sql)) {
-
-                                    $odTrec = mysqli_fetch_assoc($result);
-                                    
-                                    if(mysqli_num_rows($result) == 0){
-                                        $sql = 'SELECT * FROM part_tbl WHERE part = "'.$order['part'].'"';
-                                        $part_row = array();
-                                        if ($result= $conn -> query($sql)) {
-                                            $part_row = mysqli_fetch_assoc($result);
-                                            $sql = 'SELECT * FROM gage_tbl WHERE gage = "'.$part_row['gage'].'"';
-                                            if ($result= $conn -> query($sql)) {
-                                                $odTrec = mysqli_fetch_assoc($result);
-                                            }
-
-                                            $dim = $part_row['dim'] + 2*($odTrec['thickness']);
-                                        }
-                                    }else{
-                                        $dim = $odTrec['dim'];
-                                    }
-
-                                }?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($order['job']); ?></td>
-                                        <td><?php echo htmlspecialchars($dim); ?></td>
-                                        <td><?php echo ($order['has_started'] == 1 ? 'ACTIVE' : 'Pending'); ?></td>
-                                    </tr> 
-                                    
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
+    <div class="container">
+        <!-- >> -->
+        <?php $finished = 0; ?>
+        <div class="col-sm-12 col-xs-12">
+            <div class="questions">
+                <div class="questions__question">
+                    <input type="radio" name="finished" id="finished-0" checked  value="0">
+                    <label for="finished-0" data-question-number="✓">Not Finished Order</label>
+                </div>                
             </div>
         </div>
-    </div>
-    
-    <?php
-         //write query for all orders
-        $sql = 'SELECT * FROM orders_tbl WHERE device = "mill_04"  AND has_finished = 0';
 
-        //make query & get result
-        if ($result= $conn -> query($sql)) {
-        }
-        
-
-        $millQuad = array();
-        $millQuad = mysqli_fetch_assoc($result);
-  
-    ?>
-
-    <div class="allTablesFF">
-        <div class="tableContainerFF">
-        <div class ="millTitle">
-                    <h2><b><?php echo (!empty($millQuad) ? "<a id='millLink' href='displayProg.php?company=".getCustomer($millQuad['cust_id'])."&quantity=".$millQuad['quantity']."&job=".$millQuad['job']."'>" . 'Mill 4' . "</a> " : "Mill 4"); ?></b></h2>
+        <?php foreach($mills as $key => $mill):?>
+        <?php             
+            $rows = getResultWithQuery($conn, "SELECT * FROM orders_tbl WHERE device = '".$mill['device']."'  AND has_finished = $finished");            
+            $millUno = !empty($rows[0]) ? $rows[0] : [];
+        ?>
+        <div class="row col-sm-12 col-xs-12 mb-0">
+            <div class="col-sm-12 col-xs-12">
+                <h2 class="header mb-0 mt-0">
+                    <?php echo (!empty($millUno) ?"<a id='millLink' href='displayProg.php?company=".getCustomer($millUno['cust_id'])."&quantity=".$millUno['quantity']."&job=".$millUno['job']."'>" . ucfirst($mill['device']) . "</a>" : ucfirst($mill['device']) ); ?>
+                </h2>
             </div>
-            <div class="millTable">
+            <div class="col-sm-12 col-xs-12">
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr>
                             <td>Job #</td>
                             <td>OD</td>
-                            <td>Status</td>
+                            <td>Operator</td>
+                            <td>Scrap</td>
                         </tr>
                     </thead>
-                    <tbody>
-                        <?php foreach($millFour as $order):
+                    <tbody>                        
+                        <?php foreach($rows as $order): 
                             // getting od from part_tbl
                             $sql = "SELECT * FROM part_tbl WHERE part = '".$order['part']."' AND is_od = 1";
-                            $odQuad = array();
+                            $odUno = [];
                             $dim = 0;
                             //make query & get result
                             if ($result= $conn -> query($sql)) {
 
-                                $odQuad = mysqli_fetch_assoc($result);
+                                $odUno = mysqli_fetch_assoc($result);
                                 
                                 if(mysqli_num_rows($result) == 0){
                                     $sql = 'SELECT * FROM part_tbl WHERE part = "'.$order['part'].'"';
@@ -412,98 +129,71 @@
                                     if ($result= $conn -> query($sql)) {
                                         $part_row = mysqli_fetch_assoc($result);
                                         $sql = 'SELECT * FROM gage_tbl WHERE gage = "'.$part_row['gage'].'"';
-                                        if ($result= $conn -> query($sql)) {
-                                            $odQuad = mysqli_fetch_assoc($result);
-                                        }
+                                        $result= $conn -> query($sql);
+                                        $odUno = mysqli_fetch_assoc($result);                                        
 
-                                        $dim = $part_row['dim'] + 2*($odQuad['thickness']);
+                                        $dim = $part_row['dim'] + 2*($odUno['thickness']);
                                     }
                                 }else{
-                                    $dim = $odQuad['dim'];
+                                    $dim = $odUno['dim'];
                                 }
 
                             }?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($order['job']); ?></td>
-                                        <td><?php echo htmlspecialchars($dim); ?></td>
-                                        <td><?php echo ($order['has_started'] == 1 ? 'ACTIVE' : 'Pending'); ?></td>
-                                    </tr> 
+                                <tr>
+                                    <td><?php echo htmlspecialchars($order['job']); ?></td>
+                                    <td><?php echo htmlspecialchars($dim); ?></td>
+                                    <td><?php echo htmlspecialchars(getOp($order['job'])); ?></td>
+                                    <td><?php echo htmlspecialchars(strval(getScrap($rows)).'%'); ?></td>
+                                </tr> 
                         <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
         </div>
-
-        <?php
-            //write query for all orders
-            $sql = 'SELECT * FROM orders_tbl WHERE device = "mill_05"  AND has_finished = 0';
-
-            //make query & get result
-            if ($result= $conn -> query($sql)) {
-            }
-            
-
-            $millCin = array();
-            $millCin = mysqli_fetch_assoc($result);
-
-        
-        ?>
-
-        <div class="tableContainerFF">
-        <div class ="millTitle">
-                    <h2><b><?php echo (!empty($millCin) ? "<a id='millLink' href='displayProg.php?company=".getCustomer($millCin['cust_id'])."&quantity=".$millCin['quantity']."&job=".$millCin['job']."'>" . 'Mill 5' . "</a> " : "Mill 5"); ?></b></h2>
-            </div>
-            <div class="millTable">
-                <table class="table table-striped table-bordered">
-                    <thead>
-                        <tr>
-                            <td>Job #</td>
-                            <td>OD</td>
-                            <td>Status</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach($millFive as $order): 
-                            // getting od from part_tbl
-                                $sql = "SELECT * FROM part_tbl WHERE part = '".$order['part']."' AND is_od = 1";
-                                $odCin = array();
-                                $dim = 0;
-                                //make query & get result
-                                if ($result= $conn -> query($sql)) {
-
-                                    $odCin = mysqli_fetch_assoc($result);
-                                    
-                                    if(mysqli_num_rows($result) == 0){
-                                        $sql = 'SELECT * FROM part_tbl WHERE part = "'.$order['part'].'"';
-                                        $part_row = array();
-                                        if ($result= $conn -> query($sql)) {
-                                            $part_row = mysqli_fetch_assoc($result);
-                                            $sql = 'SELECT * FROM gage_tbl WHERE gage = "'.$part_row['gage'].'"';
-                                            if ($result= $conn -> query($sql)) {
-                                                $odCin = mysqli_fetch_assoc($result);
-                                            }
-
-                                            $dim = $part_row['dim'] + 2*($odCin['thickness']);
-                                        }
-                                    }else{
-                                        $dim = $odCin['dim'];
-                                    }
-
-                                }
-                                
-
-                                
-                                ?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($order['job']); ?></td>
-                                        <td><?php echo htmlspecialchars($dim); ?></td>
-                                        <td><?php echo ($order['has_started'] == 1 ? 'ACTIVE' : 'Pending'); ?></td>
-                                    </tr> 
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <?php endforeach;?> 
     </div>
+    
   </body>
+  <script>
+      $('input[name="finished"]').on('change', function(e){
+            let sort = $("input[name='finished']:checked").val();
+            location.href = `?finished=${sort}`;
+      });
+  </script>    
 </html>
+
+<?php
+    // takes in an employee id and returns their last name
+    function getEmployee($id){
+
+        include '../Connections/connectionTPM.php';
+
+        $sql = "SELECT * FROM employee WHERE ID = '$id'";
+
+        $result= $conn -> query($sql);
+
+        $employee = mysqli_fetch_assoc($result);
+
+        $name = $employee['name'];
+
+
+        return substr($name, strpos($name, ' ') + 1);
+
+    }
+?>
+
+<?php
+    //takes in a job number at returns most recent mill op on job
+    function getOp($job){
+        include '../Connections/connectionTPM.php';
+        $sql = "SELECT * FROM tubes_tbl WHERE job = '$job' ORDER BY id DESC";
+
+        //make query & get result
+        if ($result= $conn -> query($sql)) {
+        
+        }
+        $lastTube = mysqli_fetch_array($result);
+
+        return !empty($lastTube['mill_operator']) ? getEmployee( $lastTube['mill_operator'] ) : "";
+    }
+?>

@@ -3,10 +3,10 @@
     $numTubes = sizeof($tubes);
     $from = 0;
     $to;
-    if($numTubes < 17){
+    if($numTubes < 13){
         $to = $numTubes;
     }else{
-        $to = 17;
+        $to = 13;
     }
     $numPages = ceil($numTubes/$to);
 
@@ -16,7 +16,7 @@
         <div class="titleImg">
             <h2>
                 <strong>TPM Final Inspection-GeoForm</strong>
-                <div class="image"> <img src="logo_tpm.jpeg"></div>
+                <div class="image"> <img src="/opt/bitnami/apache2/htdocs/TPM-master/TPM_Forms/pages/logo_tpm.jpeg"></div>
             </h2>
         </div>
         
@@ -30,6 +30,7 @@
             
             <tr>
                 <td></td>
+                <td></td>
                 <td class="pad-l-15">+ <?= $partSpec['length_plus'] ?> </td>
             </tr>
             
@@ -42,6 +43,7 @@
             <tr>
                 <td>Total Order: <?= $orderACT['quantity'] ?></td>
                 <td>OD: <?= $partSpec['dim'] ?></td>
+                <td>Date Tubes inspected:  <?= date('Y-m-d', strtotime($tubes[$from]['final_insp_time']))?> to <?= date('Y-m-d', strtotime($tubes[$to-1]['final_insp_time']))?></td>
             </tr>
             
             <tr>
@@ -62,15 +64,9 @@
             </tr>
             
             <tr>
-                <td><strong>Ship Date : <?= $orderACT['shipped'] ?></strong></td>
+                <td><strong>Ship Date : <?= $orderACT['ship_date'] ?></strong></td>
                 <td><strong>Drift inspected (+ or -.002):</strong></td>
-                <td><?= $tubes[0]['id_drift2']?></td>
-            </tr>
-            
-            <tr>
-                <td></td>
                 <td>Dimensions: <?= $orderACT['drift_dim']?></td>
-                <td></td>
             </tr>
 
             <tr>
@@ -79,10 +75,6 @@
                 <td></td>
             </tr>            
         </table>
-        
-        <p class="margin-b-15">
-            Date Tubes inspected:  <?= date('Y-m-d', strtotime($tubes[$from]['final_insp_time']))?> to <?= date('Y-m-d', strtotime($tubes[$to-1]['final_insp_time']))?>
-        </p>
         
         <table class="summary-table">
             <thead>
@@ -136,7 +128,7 @@
 <?php 
    $numPages--;
    $from = $to;
-   $to += 11;
+   $to += 13;
     }
 
 ?>

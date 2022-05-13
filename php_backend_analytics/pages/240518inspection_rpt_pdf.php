@@ -5,7 +5,7 @@
     if($numTubes < 12){
         $to = $numTubes;
     }else{
-        $to = 12;
+        $to = 10;
     }
     $numPages = ceil($numTubes/$to);
     
@@ -16,7 +16,7 @@
         <div class="titleImg">
             <h2>
                 <strong>TPM Inspection-Station Check Sheet</strong>
-                <div class="image"> <img src="logo_tpm.jpeg"></div>
+                <div class="image"> <img src="/opt/bitnami/apache2/htdocs/TPM-master/TPM_Forms/pages/logo_tpm.jpeg"></div>
             </h2>
         </div>
         
@@ -65,12 +65,12 @@
             <tr>
                 <td><strong>Ship Date : <?= $orderACT['ship_date'] ?></strong></td>
                 <td><strong>Drift inspected (+ or -.002):</strong></td>
-                <td><?= $orderACT['drift_result']?></td>
+                <td></td>
             </tr>
             
             <tr>
                 <td></td>
-                <td>Dimensions: <?= $orderACT['drift_dim']?></td>
+                <td></td>
                 <td></td>
             </tr>
 
@@ -117,11 +117,9 @@
                     <td><?= $tubes[$i]['od_check3'] ?></td>
                     <td><?= $tubes[$i]['length_check2'] ?></td>
                     <td><?= $tubes[$i]['weld'] ?></td>
-                    <td><?php if(empty($tubes[$i]['remarks_cut'])){
-                                echo $tubes[$i]['repairs'];
-                    }else{
-                        echo $tubes[$i]['remarks_cut'];
-                    } ?></td>
+                    <td><?php if(!(empty($tubes[$i]['remarks_cut']))){
+                                echo $tubes[$i]['remarks_cut'];
+                    }?></td>
                 </tr>
                 <?php endfor; ?>
             </tbody>
@@ -145,7 +143,7 @@
 <?php 
    $numPages--;
    $from = $to;
-   $to += 25;
+   $to += 10;
     }
 
 ?>

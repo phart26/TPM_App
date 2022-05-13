@@ -6,8 +6,6 @@
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
 
-    set_include_path('/opt/bitnami/apache2/htdocs/TPM-master/TPM_Forms/pages/');
-
     require 'PHPMailer/src/Exception.php';
     require 'PHPMailer/src/PHPMailer.php';
     require 'PHPMailer/src/SMTP.php';
@@ -28,7 +26,11 @@
         $job = $order['job'];
         
         if($job != ''){
+            //Something to write to txt log
+            $log  = "job:".$job;
 
+            //Save string to log, use FILE_APPEND to append.
+            file_put_contents('log_'.date("j.n.Y").'.log', $log, FILE_APPEND);
             // set generate pdf back to 0 in db
             $sql = "UPDATE orders_tbl SET gen_pdf = 0 WHERE job = '$job' ";
                 
@@ -39,32 +41,32 @@
             ob_start();
 
                     
-            require 'DBForReports.php';
+            include 'DBForReports.php';
 
-            require 'overviewSheet_pdf.php';
-            require 'first_part_drift_confirmation_pdf.php';
-            require 'welding_pdf.php';
-            require '240518cutoff_station_check_sheet_pdf.php';
-            require '240518inspection_rpt_pdf.php';
+            require_once 'overviewSheet_pdf.php';
+            require_once 'first_part_drift_confirmation_pdf.php';
+            require_once 'welding_pdf.php';
+            require_once '240518cutoff_station_check_sheet_pdf.php';
+            require_once '240518inspection_rpt_pdf.php';
 
             if($tubes[0]['end1_read1'] != 0){
-                require '240518ring_station_check_list_pdf.php';
+                require_once '240518ring_station_check_list_pdf.php';
             }
 
             if(!empty($rings)){
-                require '240518geo_form_ring_inspection_pdf.php';
+                require_once '240518geo_form_ring_inspection_pdf.php';
             }
 
             if($tubes[0]['ringA'] != ""){
-                require 'geo_form_ring_weld_pdf.php';
+                require_once 'geo_form_ring_weld_pdf.php';
             }
 
             if($tubes[0]['ring_num1'] != ""){
-                require 'final_inspection_geo_form_pdf.php';
+                require_once 'final_inspection_geo_form_pdf.php';
             }
 
             // require_once 'worksheet_pdf.php';
-            require 'dompdf/autoload.inc.php';
+            require_once 'dompdf/autoload.inc.php';
             
             $fileName = strval($job)."_forms.pdf";
 
@@ -86,10 +88,6 @@
             // Output the generated PDF to Browser
             $output = $dompdf->output();
 
-            $source = '/opt/bitnami/apache2/htdocs/TPM-master/TPM_Forms/pages/test.pdf';
-            $destination = '/opt/bitnami/apache2/htdocs/TPM-master/TPM_Forms/pages/paperwork/'.$job.'_forms.pdf';
-
-            copy($source, $destination);
 
             file_put_contents('/opt/bitnami/apache2/htdocs/TPM-master/TPM_Forms/pages/paperwork/'.$job.'_forms.pdf', $output);
                     
@@ -105,16 +103,15 @@
                 $mail->isSMTP();                                            //Send using SMTP
                 $mail->Host       = 'smtp-relay.sendinblue.com';                     //Set the SMTP server to send through
                 $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                $mail->Username   = 'paperwork.tpmltd1@gmail.com';                     //SMTP username
-                $mail->Password   = 'b8OMFULBacV3yhtv';                               //SMTP password
+                $mail->Username   = 'tpmltd.paperwork@gmail.com';                     //SMTP username
+                $mail->Password   = 'GRgWQXfq0zrpBaZh';                               //SMTP password
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
                 $mail->Port       = 465;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
 
                 //Recipients
-                $mail->setFrom('paperwork.tpmltd1@gmail.com', 'TPM Paperwork');
+                $mail->setFrom('tpmltd.paperwork@gmail.com', 'TPM Paperwork');
                 $mail->addAddress('kayla@tpmltd.com', 'Kayla Mills');     //Add a recipient
                 $mail->addAddress('jennifer@tpmltd.com', 'Jennifer Anastasio');     //Add a recipient
-                $mail->addAddress('mvlasau@gmail.com', 'Mikita Vlasau');
                 // $mail->addAddress('prestonhart13@gmail.com', 'Preston Hart');
                 //Attachments
                 // $mail->addStringAttachment($output, $fileName);         //Add attachments

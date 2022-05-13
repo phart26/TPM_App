@@ -32,24 +32,31 @@
      //fetch resulting rows as an array
      $partSpec = mysqli_fetch_assoc($result1);
 
-     //finding next tube to cutoff
-    $sql2 = "SELECT * FROM tubes_tbl WHERE cutoff_check = 1 AND job = $job AND mill_check = 1 AND insp_check = 0";
+    //finding next tube to cutoff
+    // $sql2 = "SELECT * FROM tubes_tbl WHERE cutoff_check = 1 AND job = $job AND mill_check = 1 AND insp_check = 0";    
 
-    if ($result2= $conn -> query($sql2)) {
+    // if ($result2= $conn -> query($sql2)) {
 	
-	}
+	// }
 	
-    //fetch resulting rows as an array
-    $nextTubesInsp = array();
-    $nextTubeInsp = "";
-    while($tubes = mysqli_fetch_array($result2)){
-        $nextTubesInsp[] = $tubes;
-    }
+    // //fetch resulting rows as an array
+    // $nextTubesInsp = array();
+    
+    // while($tubes = mysqli_fetch_array($result2)){
+    //     $nextTubesInsp[] = $tubes;
+    // }
 
-    if(!empty($nextTubesInsp)){
-        $nextTubeInsp = $nextTubesInsp[0]['id'];
-    }
- 
+    // if(!empty($nextTubesInsp)){
+    //     $nextTubeInsp = $nextTubesInsp[0]['id'];
+    // }
+
+    //finding the next tube to cutoff
+    $sql2 = "SELECT id, SUBSTRING_INDEX(id, '-', -1)*1 as cnt FROM tubes_tbl WHERE cutoff_check = 1 AND job = $job AND mill_check = 1 AND insp_check = 0 ORDER BY cnt ASC limit 1";        
+    
+    $result2 = $conn -> query($sql2);
+    
+    $nextTubeInsp = mysqli_fetch_assoc($result2);
+
     $jsonArr = array(
             'job' => $job,
             'poNum' => $orderACT['po'],
@@ -63,7 +70,7 @@
             'odNeg' => $partSpec['dim_minus'],
             'idDrift' => $partSpec['drift'],
             'inspNotes' => $partSpec['insp_notes'],
-            'nextTubeInsp' => $nextTubeInsp
+            'nextTubeInsp' => !empty($nextTubeInsp['id']) ? $nextTubeInsp['id'] : ""
     );
 
     

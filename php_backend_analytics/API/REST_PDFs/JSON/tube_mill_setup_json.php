@@ -13,9 +13,9 @@
  
      $sql1 = "SELECT * FROM part_tbl WHERE part = '".$orderACT['part']."'";
  
-     if ($result1= $conn -> query($sql1)) {
+    if ($result1= $conn -> query($sql1)) {
          
-        }
+    }
          
      //fetch resulting rows as an array
      $partSpec = mysqli_fetch_assoc($result1);

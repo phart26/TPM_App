@@ -1,7 +1,8 @@
 <!-- Displays the order progress information for the mill that is clicked on from the active orders page -->
-
 <?php
+    $header_tilte = "Displaying Mill Progress";
     include '../Connections/connectionTPM.php';
+    include 'header.php';
 ?>
 
 <?php
@@ -50,7 +51,7 @@
 
     //getting updated number of tubes
     $currTub = sizeof($orderACT);
-    $percent = round(($currTub/$totTub)*100);
+    $percent = !empty($totTub) ? round(($currTub/$totTub)*100) : 0;
 
     //calculating the number of tubes welded and inspected today
     date_default_timezone_set("US/Central");
@@ -66,155 +67,113 @@
         if($new_date_mill == date("Y-m-d")){
             $weld_tod++;
         }
-        if($new_date_insp == date("Y-m-d")){
+        if($new_date_insp == date("Y-m-d") && $tube['insp_check'] == 1){
             $insp_tod++;
         }
-        if(!empty($tube['insp_time'])){
+        if($tube['insp_check'] == 1){
             $insp_tot++;
         }
     }
 
-
-    
     $timeStamp = date("Y-m-d H:i:s");
-
     
 ?>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-   "http://www.w3.org/TR/html4/loose.dtd">
-
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="description" content="Table display for out going TPM orders for the next two weeks">
-        <meta name="viewport" content="width=device-width, initial-scale = 1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        
-        <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-        <script src = "https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-        <script src = "https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
-
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-        <link rel = "stylesheet" href = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
-        <link rel = "stylesheet" href = "activeOrders.css">
-        <link rel = "stylesheet" href = "hamburger.css">
-        <link rel = "stylesheet" href = "https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" />
-        <link href = "https://fonts.googleapis.com/css?family=Merriweather|Playfair+Display|Raleway:400,700|Vollkorn:700&display=swap" rel="stylesheet">
-
-        <title>Displaying Progress</title>
-    </head>
-  <body >
-    <div class="straightNav center">
-            <div class="menu">
-                <a href="upcomingOrders.php" >Upcoming Orders</a>
-                <a href="../../TPM_Orders/todTomOrders.php" >Shipping Today and Tomorrow</a>
-                <!-- <a href="../../TPM_Orders/viewOrders.php" >All Orders</a> -->
-                <a href="millTable.php">Mills</a>
-                <a href="index.php">All Orders</a>
+    <div class="container-fluid px-4 pb-4">
+        <div class="card mt-4">
+            <div class="card-header">
+                <h3 class="text-center py-0"><b> Mill <?php echo substr($job_mill['device'], 6); ?></b></h3>
             </div>
-    </div>
+            <div class="card-body">
 
-        <!-- nav bar -->
-        <div class="navBar">
-            <div class="nav-toggle">
-                <div class="nav-toggle-bar"></div>
-            </div>
-
-            <nav id="nav" class="nav">
-                <ul>
-                <li><h3><a href="upcomingOrders.php" id="two">Upcoming Orders</a></h3></li>
-                    <li><h3><a href="../../TPM_Orders/todTomOrders.php" id="two" >Shipping Today</a></h3></li>
-                    <!-- <li><h3><a href="../../TPM_Orders/viewOrders.php" id="two">All Orders &nbsp &nbsp</a></h3></li> -->
-                    <li><h3><a href="millTable.php" id="two">Mills &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp</a></h3></li>
-                    <li><h3><a href="index.php" id="two">All Orders &nbsp&nbsp &nbsp</a></h3></li>
-                </ul>
-            </nav>
-        </div>
-        <script>
-            (function() {
-
-                let hamburger = {
-                    nav: document.querySelector('#nav'),
-                    navToggle: document.querySelector('.nav-toggle'),
-
-                    initialize() {
-                        this.navToggle.addEventListener('click',
-                    () => { this.toggle(); });
-                    },
-
-                    toggle() {
-                        this.navToggle.classList.toggle('expanded');
-                        this.nav.classList.toggle('expanded');
-                    },
-                };
-
-                hamburger.initialize();
-
-            }());
-        </script>
-        
-            <h2 class= "millTitle center"><b> Mill <?php echo substr($job_mill['device'], 6); ?></b></h2>
-            <form action="displayProg.php" method="POST">
-                <input type="hidden" name="job" value= "<?php echo $job?>">
-                <input type="submit" name="reassign" value="Pause Mill" onclick= "return confirm('do you want to stop this mill?')" class="button reassign">
-            </form>
-        
-    <div class="tableContainer" id="millDesc">
-        <div class ="dataTitle">
-                <h3 id="displayTitle"><b> Job #: <?php echo '<div class= "display center"> ' .$job; ?></b></h3>
-                <h3 id="displayTitle"><b>Company: <?php echo '<div class= "display center"> ' .$company; ?></b></h3>
-                <h3 id="displayTitle"><b>Quantity: <?php echo '<div class= "display center"> ' .$totTub; ?></b></h3>
-                <h3 id="displayTitle"><b>Tubes Left on Mill: <?php echo '<div class= "display center"> ' .($totTub - $currTub); ?></b></h3>
-                <br><br />
-        </div>
-            <div class="outter">
-                <div class="inner">
-                    <div class="right percent">
-                        <b><?php echo $percent ?>%</b>
-                    </div>  
+                <div class="row px-4 mb-4">
+                    <div class="col-md-3 col-xs-hidden"></div>
+                    <div class="col-md-6 col-xs-12">
+                        <div class="row">
+                            <div class="col-6 text-left px-0">
+                                <h4 class="font-weight-bold text-secondary">Job #: <label class="text-info"><?php echo $job; ?></label></h4>                                
+                            </div>
+                            <div class="col-6 text-left px-0">
+                                <h4 class="font-weight-bold text-secondary">Company: <label class="text-info font-weight-bold"><?= $company;?></label></h4>                                
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <br><br />
-    </div>
-    <div class="dataContain">
-        <section class="container grey lighten-4 " id="box">
-            <div class="center">
-                <style type="text/CSS">
-                .outter{
-                        height:27px;
-                        width: 60%;
-                        border: solid 2px black;
-                        border-radius: 3px;
-                        margin-left: 20%;
-                    }
-
-                    .inner{
-                        height:24px;
-                        width: <?php echo $percent ?>%;
-                        border-right: solid 2px black;
-                        /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#b4e391+0,61c419+50,b4e391+100;Green+3D */
-                        background: #b4e391; /* Old browsers */
-                        background: -moz-linear-gradient(top, #b4e391 0%, #61c419 50%, #b4e391 100%); /* FF3.6-15 */
-                        background: -webkit-linear-gradient(top, #b4e391 0%,#61c419 50%,#b4e391 100%); /* Chrome10-25,Safari5.1-6 */
-                        background: linear-gradient(to bottom, #b4e391 0%,#61c419 50%,#b4e391 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-                        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b4e391', endColorstr='#b4e391',GradientType=0 ); /* IE6-9 */
-
-
-                    }
-                </style>
                 
-                <ul class="progList">
-                    <li> Tubes Welded Today at <?php echo $timeStamp; ?><?php echo '<div class= "display"> '.$weld_tod.' </div>'; ?></li>
-                    <li> Tubes Inspected Today at <?php echo $timeStamp; ?><?php echo '<div class= "display"> '.$insp_tod.' </div>'; ?></li>
-                    <li> Total Tubes Welded <?php echo '<div class= "display"> '.sizeof($orderACT).' </div>'; ?></li>
-                    <li> Total Tubes Inspected <?php echo '<div class= "display"> '.$insp_tot.' </div>'; ?></li>
-                    
-                </ul>
+                <div class="row px-4 mb-4">
+                    <div class="col-md-3 col-xs-hidden"></div>
+                    <div class="col-md-6 col-xs-12">
+                        <div class="row">
+                            <div class="col-6 text-left px-0">
+                                <h4 class="font-weight-bold text-secondary">Quantity: <label class="text-info"><?php echo $totTub; ?></label></h4>                                
+                            </div>
+                            <div class="col-6 text-left px-0">
+                                <h4 class="font-weight-bold text-secondary">Tubes Left on Mill: <label class="text-info font-weight-bold"><?= $totTub > $currTub ? ($totTub - $currTub) : 0;?></label></h4>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">                      
+                    <div class="w-50 m-auto progress" style="height: 20px;">
+                        <div class="progress-bar progress-bar-striped bg-info" role="progressbar" 
+                                style="width: <?= $percent?>%;" aria-valuenow="<?= $percent?>" aria-valuemin="0" aria-valuemax="100" title="<?= $percent?>%"><?= $percent?>%</div>
+                    </div>
+                </div>
+
+                <!-- >> #################################################### -->
+
+                <div class="row px-4 my-4">
+                    <div class="col-md-3 col-xs-hidden"></div>
+                    <div class="col-md-6 col-xs-12">
+                        <div class="row">
+                            <div class="col-12 text-center px-0">
+                                <h4 class="font-weight-bold text-secondary">Tubes Welded Today at:</h4>
+                                <label class="text-info"><?=  $timeStamp; ?></label><br> 
+                                <label class="text-danger"><?= $weld_tod?></label>
+                            </div>                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row px-4 my-4">
+                    <div class="col-md-3 col-xs-hidden"></div>
+                    <div class="col-md-6 col-xs-12">
+                        <div class="row">
+                            <div class="col-12 text-center px-0">
+                                <h4 class="font-weight-bold text-secondary">Tubes Inspected Today at:</h4>
+                                <label class="text-info"><?=  $timeStamp; ?></label><br>
+                                <label class="text-danger"><?= $insp_tod ?></label>
+                            </div>                            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row px-4 my-4">
+                    <div class="col-md-3 col-xs-hidden"></div>
+                    <div class="col-md-6 col-xs-12">
+                        <div class="row">
+                            <div class="col-12 text-center px-0">
+                                <h4 class="font-weight-bold text-secondary">Total Tubes Welded:</h4>
+                                <label class="text-danger"><?= count($orderACT) ?></label>
+                            </div>                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row px-4 my-4">
+                    <div class="col-md-3 col-xs-hidden"></div>
+                    <div class="col-md-6 col-xs-12">
+                        <div class="row">
+                            <div class="col-12 text-center px-0">
+                                <h4 class="font-weight-bold text-secondary">Total Tubes Inspected:</h4>
+                                <label class="text-danger"><?= $insp_tot ?></label>
+                            </div>                            
+                        </div>
+                    </div>
+                </div>
+
             </div>
-        </section>
     </div>
-    
     
   </body>
 </html>

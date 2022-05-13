@@ -38,7 +38,7 @@
         $result = processRequest($_SERVER['REQUEST_METHOD']);
        
         
-        if($result['coil_no'] != ""){
+        if(!empty($result['coil_no'])){
             date_default_timezone_set("US/Central");
             $timeStamp = date("Y-m-d H:i:s");
             $sql = "INSERT INTO used_coil (coil_no, work, weight, job, date_received) SELECT coil_no, work, weight, job, date_received FROM coil_tbl WHERE coil_no = '".$result['coil_no']."'";
@@ -62,7 +62,7 @@
         }
 
 
-        if($result['filter_no'] != ""){
+        if(!empty($result['filter_no'])){
             date_default_timezone_set("US/Central");
             $timeStamp = date("Y-m-d H:i:s");
             $sql = "INSERT INTO used_mesh (mesh_no, supplier, job, tpm_po, date_received, width, length, heat, mesh, type)  SELECT mesh_no, supplier, job, tpm_po, date_received, width, length, heat, mesh, type FROM mesh_tbl WHERE mesh_no = '".$result['filter_no']."'";
@@ -84,7 +84,7 @@
             }
         }
 
-        if($result['drain_no'] != ""){
+        if(!empty($result['drain_no'])){
             date_default_timezone_set("US/Central");
             $timeStamp = date("Y-m-d H:i:s");
             $sql = "INSERT INTO used_mesh (mesh_no, supplier, job, tpm_po, date_received, width, length, heat, mesh, type)  SELECT mesh_no, supplier, job, tpm_po, date_received, width, length, heat, mesh, type FROM mesh_tbl WHERE mesh_no = '".$result['drain_no']."'";

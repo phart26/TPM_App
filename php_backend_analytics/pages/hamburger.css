@@ -1,11 +1,25 @@
 .navBar{
 	visibility: hidden;
+	height: 0;
 }
-
+.pb-0{
+	padding-bottom: 0px;
+}
+.mb-0{
+	margin-bottom: 0px;
+}
+.mt-0{
+	margin-top: 0px;
+}
+@media screen and (min-width: 800px){
+	.header{
+		font-weight: bold;		
+	}	
+}
 @media screen and (max-width: 800px){
 
 	.navBar{
-		visibility: visible;
+		visibility: visible;		
 	}
 
 	* {
@@ -26,76 +40,78 @@
 
 	/* nav toggle */
 	.nav-toggle {
-	cursor: pointer;
-	height: 2rem;
-	left: 32rem;
-	position: fixed;
-	top: 2rem;
-	width: 3.6rem;
-	z-index: 2;
+		cursor: pointer;
+		height: 2rem;
+		right: 3%;
+		position: fixed;
+		top: 2rem;
+		width: 3.6rem;
+		z-index: 2;
 	}
 	.nav-toggle:hover {
-	opacity: 0.8;
+		opacity: 0.8;
 	}
 	.nav-toggle .nav-toggle-bar,
 	.nav-toggle .nav-toggle-bar::after,
 	.nav-toggle .nav-toggle-bar::before {
-	position: absolute;
-	top: 50%;
-	-webkit-transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-	transform: translateY(-50%);
-	background: #8B0000;
-	content: "";
-	height: 0.4rem;
-	transition: all 0.5s;
-	width: 100%;
+		position: absolute;
+		top: 50%;
+		-webkit-transform: translateY(-50%);
+		-ms-transform: translateY(-50%);
+		transform: translateY(-50%);
+		background: #8B0000;
+		content: "";
+		height: 0.4rem;
+		transition: all 0.5s;
+		width: 100%;
 	}
 	.nav-toggle .nav-toggle-bar {
-	margin-top: 0;
+		margin-top: 0;
 	}
 	.nav-toggle .nav-toggle-bar::after {
-	margin-top: 0.8rem;
+		margin-top: 0.8rem;
 	}
 	.nav-toggle .nav-toggle-bar::before {
-	margin-top: -0.8rem;
+		margin-top: -0.8rem;
 	}
 	.nav-toggle.expanded .nav-toggle-bar {
-	background: transparent;
+		background: transparent;
 	}
 	.nav-toggle.expanded .nav-toggle-bar::after, .nav-toggle.expanded .nav-toggle-bar::before {
-	background: white;
-	margin-top: 0;
+		background: white;
+		margin-top: 0;
 	}
 	.nav-toggle.expanded .nav-toggle-bar::after {
-	-ms-transform: rotate(45deg);
-	-webkit-transform: rotate(45deg);
-	transform: rotate(45deg);
+		-ms-transform: rotate(45deg);
+		-webkit-transform: rotate(45deg);
+		transform: rotate(45deg);
 	}
 	.nav-toggle.expanded .nav-toggle-bar::before {
-	-ms-transform: rotate(-45deg);
-	-webkit-transform: rotate(-45deg);
-	transform: rotate(-45deg);
+		-ms-transform: rotate(-45deg);
+		-webkit-transform: rotate(-45deg);
+		transform: rotate(-45deg);
 	}
 
 	/* nav */
 	.nav {
-	background: #8B0000;
-	color: white;
-	cursor: pointer;
-	display: flex;
-	font-size: 2rem;
-	height: 100vh;
-	left: 60rem;
-	padding-top: 20%;
-	position: fixed;
-	top: 0;
-	transition: left 0.5s;
-	width: 20rem;
-	z-index: 1;
+		background: #8B0000;
+		color: white;
+		cursor: pointer;
+		display: flex;
+		font-size: 2rem;
+		min-height: 100vh;
+		left: 60rem;
+		padding-top: 20%;
+		position: fixed;
+		top: 0;
+		transition: left 0.5s;
+		width: 55%;
+		z-index: 1;
 	}
 	.nav.expanded {
-	left: 20rem;
+		left: unset;
+		right: 0;
+		height: 100%;
 	}
 	.nav ul {
 	list-style: none;
@@ -104,5 +120,63 @@
 
 	.nav ul li{
 		border-bottom: 3px dotted white;
+		width: 100%;
+	}
+	.header{
+		font-size: 12pt;
+		font-weight: bold;
+	}	
+	.questions label{
+		font-size: 12pt;
 	}
 }
+
+/* Using css var aka custom properies, don't use them if you don't use tools such as postCss */
+:root {
+	--color-blue: #5897fc;
+	--color-blue-grayed: #e0ecff;
+  }
+  /* First hide radios */
+  .questions input[type="radio"] {
+	display: none;
+  }
+  
+  /* Generate new radio buttons, which we can style via css */
+  .questions label:before {
+	content: attr(data-question-number);
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	border: 1px solid;
+	text-align: center;
+	line-height: 30px;
+	margin-right: 20px;
+  }
+  
+  /* Applying styles when checking the buttons */
+  .questions input[type="radio"]:checked ~ label {
+	background-color: var(--color-blue-grayed);
+	border-color: var(--color-blue);
+  }
+  
+  .questions input[type="radio"]:checked ~ label:before {
+	background-color: var(--color-blue);
+	border-color: var(--color-blue);
+	color: white;
+  }
+  
+  .questions label {
+	display: block;
+	cursor: pointer;
+	
+	padding: 10px;
+	margin-bottom: 10px;
+	background-color: white;
+	border: 2px solid white;
+	border-radius: 15px;
+  }
+  
+  .questions {
+	padding: 20px;
+  }

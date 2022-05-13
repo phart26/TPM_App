@@ -146,9 +146,7 @@ td{
 .menu a{
     font-size: 20px;
     color: #8B0000;
-    margin-right: 5%;
-    
-   
+    margin-right: 4%;
 }
 
 .menu a:hover{
@@ -160,7 +158,11 @@ td{
     font-size: 15px;
 }
 
-#two{
+#desc1{
+    font-size: 15px;
+}
+
+#two, #nav ul li a{
     font-size: 20px;
 }
 
@@ -199,6 +201,11 @@ td{
     display: inline;
 }
 
+#form1{
+    padding: 0;
+    display: inline;
+}
+
 .button{
     background: #8B0000;
     border-radius: 5px;
@@ -219,6 +226,11 @@ td{
     display: inline;
 }
 
+#assignForm1{
+    padding:0;
+    display: inline;
+}
+
 #startMillForm{
     width: 10%;
     display: none;
@@ -233,11 +245,15 @@ input[name="start"]{
     display:none;
 }
 
-#shipDate{
+.shipDate{
     width: 15%;
 }
 
 #millBtn{
+    width: 10%;
+}
+
+#millBtn1{
     width: 10%;
 }
 
@@ -267,27 +283,13 @@ input[name="start"]{
     
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* For mobile
 ------------------------------------------------*/
 
 @media screen and (max-width: 800px){
 
 
-    #OOTitle{
+    .OOTitle{
         font-size: 35px;
     }
 
@@ -346,6 +348,10 @@ input[name="start"]{
         font-size: 8px;
     }
 
+    #desc1{
+        font-size: 8px;
+    }
+
     .straightNav{
         visibility: hidden;
     }
@@ -393,5 +399,8 @@ input[name="start"]{
         font-size: 20px;
     }
 
+    #outgoingOrders_filter label input{
+        width: 100%;
+    }
 }
 

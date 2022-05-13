@@ -1,17 +1,21 @@
 <?php
-    // include '../Connections/connectionTPM.php';
+    //include '../Connections/connectionTPM.php';
     $millOpArr = array();
     $cutOpArr = array();
     $inspArr = array();
+    $exclArr = array();
 
     $millOpTubArr = array();
     $cutOpTubArr = array();
     $inspTubArr = array();
+    $exclTubArr = array();
 
     
     array_push($millOpArr, $tubes[0]['mill_operator']);
     array_push($cutOpArr, $tubes[0]['cutoff_operator']);
     array_push($inspArr, $tubes[0]['inspector']);
+    array_push($exclArr, $tubes[0]['ring_end_insp']);
+
     
 
     $tubeCount = 1;
@@ -33,6 +37,12 @@
             
         }
 
+        if(!in_array($tube['ring_end_insp'], $exclArr)){
+            array_push($exclArr, $tube['ring_end_insp']);
+            $exclTubArr[array_search($tube['ring_end_insp'], $exclArr) -1] = $tubeCount;
+            
+        }
+
         $tubeCount++;
         
     }
@@ -41,6 +51,8 @@
 ?>
 
 <?php
+    $TubeCoil = array();
+    $mesh = array();
 
     $coilArr = array();
     $drainTopArr = array();
@@ -54,7 +66,7 @@
     $drainBotTube = array();
     $filterBotTube = array();
 
-    $sql11 = "SELECT * FROM tubes_tbl WHERE job = $job AND coil_change = 1";
+    $sql11 = "SELECT * FROM tubes_tbl WHERE job = '$job' AND coil_change = 1";
 
     if ($result11= $conn -> query($sql11)) {
 
@@ -72,6 +84,15 @@
 
             }
             $TubeCoil = mysqli_fetch_array($result12);
+
+            if(empty($TubeCoil)){
+                $sql12 = "SELECT * FROM coil_tbl WHERE coil_no = '".$coil['coil']."'";
+
+                if ($result12= $conn -> query($sql12)) {
+
+                }
+                $TubeCoil = mysqli_fetch_array($result12);
+            }
 
             //getting heat and type of coil
             $sql13 = "SELECT * FROM steel_tbl WHERE work = '".$TubeCoil['work']."'";
@@ -108,6 +129,16 @@
 
             }
             $mesh = mysqli_fetch_array($result11);
+
+            if(empty($mesh)){
+                $sql11 = "SELECT * FROM mesh_tbl WHERE mesh_no = '".$drain['drain_mesh_top']."'";
+
+                if ($result11= $conn -> query($sql11)) {
+
+                }
+                $mesh = mysqli_fetch_array($result11);
+            }
+
             $meshArr = array($drain['drain_mesh_top'], $mesh['heat'], $mesh['type']);
 
             array_push($drainTopArr, $meshArr);
@@ -137,6 +168,16 @@
 
             }
             $mesh = mysqli_fetch_array($result11);
+
+            if(empty($mesh)){
+                $sql11 = "SELECT * FROM mesh_tbl WHERE mesh_no = '".$filter['filter_mesh_top']."'";
+
+                if ($result11= $conn -> query($sql11)) {
+
+                }
+                $mesh = mysqli_fetch_array($result11);
+            }
+            
             $meshArr = array($filter['filter_mesh_top'], $mesh['heat'], $mesh['type']);
 
             array_push($filterTopArr, $meshArr);
@@ -163,7 +204,16 @@
 
             }
             $mesh = mysqli_fetch_array($result11);
-            $meshArr = array($drain['filter_mesh_bot'], $mesh['heat'], $mesh['type']);
+
+            if(empty($mesh)){
+                $sql11 = "SELECT * FROM mesh_tbl WHERE mesh_no = '".$filter['filter_mesh_bot']."'";
+
+                if ($result11= $conn -> query($sql11)) {
+
+                }
+                $mesh = mysqli_fetch_array($result11);
+            }
+            $meshArr = array($filter['filter_mesh_bot'], $mesh['heat'], $mesh['type']);
 
             array_push($filterBotArr, $meshArr);
             array_push($filterBotTube, substr($filter['id'],strpos($filter['id'], '-')+1));
@@ -188,6 +238,15 @@
 
             }
             $mesh = mysqli_fetch_array($result11);
+
+            if(empty($mesh)){
+                $sql11 = "SELECT * FROM mesh_tbl WHERE mesh_no = '".$drain  ['drain_mesh_bot']."'";
+
+                if ($result11= $conn -> query($sql11)) {
+
+                }
+                $mesh = mysqli_fetch_array($result11);
+            }
             $meshArr = array($drain['drain_mesh_bot'], $mesh['heat'], $mesh['type']);
 
             array_push($drainBotArr, $meshArr);
@@ -199,29 +258,14 @@
 
 ?>
 
-<?php
 
-    function getEmployee($emp_id){
-        include '../Connections/connectionTPM.php';
-        $sql = "SELECT * FROM employee WHERE ID = '".$emp_id."'";
-        //make query & get result
-        if ($result= $conn -> query($sql)) {
-                            
-        }
-                            
-        //fetch resulting rows as an array
-        $employee = mysqli_fetch_assoc($result);
-
-        return $employee['name'];
-    }
-?>
 <div id="pagebreak" class="pagebreak">
         
         <div class="titleImg">
                 <h2 class="title" style="font-size: 28px;">
                     <strong>TPM Overview Sheet</strong>
                 </h2>
-                <div class="image"> <img src="logo_tpm.jpeg"></div>
+                <div class="image"> <img src="/opt/bitnami/apache2/htdocs/TPM-master/TPM_Forms/pages/logo_tpm.jpeg"></div>
         </div>
 
         <table>
@@ -239,7 +283,7 @@
             <tr>
                 <td>
                     <h3 class="margin-b-15">
-                    Dates of Operation:  <?= date('Y-m-d', strtotime($orderACT['began']))?> to <?= date('Y-m-d', strtotime($orderACT['shipped']))?><h3>
+                    Dates of Operation:  <?= date('Y-m-d', strtotime($orderACT['began']))?> to <?= date('Y-m-d', strtotime($orderACT['finished']))?><h3>
                 </td>
             </tr>
             
@@ -305,6 +349,27 @@
                                 }?></td>
                 </tr>
             <?php endforeach;?>
+
+            <?php if($tubes[0]['ring_end_insp'] > 0): ?>
+                <tr>
+                    <td><h3>Excluder Inspector(s)</h3></td>
+                </tr>
+
+                <?php $tubeStart = 1; foreach($exclArr as $operator): ?>
+                    <tr>
+                        <td><?php echo getEmployee($operator);?></td>
+                        <td></td>
+                        <td><?php 
+                                    if(!empty($exclTubArr[array_search($operator, $exclArr)])){
+                                        echo str_pad($tubeStart, 3, '0', STR_PAD_LEFT) ." - ".str_pad(($tubeStart + $exclTubArr[array_search($operator, $exclArr)] - 1), 3, '0', STR_PAD_LEFT); 
+                                        
+                                        $tubeStart = $tubeStart + $exclTubArr[array_search($operator, $exclArr)]; 
+                                    }else{
+                                        echo str_pad($tubeStart, 3, '0', STR_PAD_LEFT) ." - ".str_pad($orderACT['quantity'], 3, '0', STR_PAD_LEFT); 
+                                    }?></td>
+                    </tr>
+                <?php endforeach;?>
+            <?php endif; ?>
         </table>
         <table>
             <tr><td>&nbsp</td></tr>
@@ -457,5 +522,21 @@
    $numPages--;
    $from = $to;
    $to += 25;
+    }
+?>
+<?php
+
+    function getEmployee($emp_id){
+        include '../Connections/connectionTPM.php';
+        $sql = "SELECT * FROM employee WHERE ID = '$emp_id'";
+        //make query & get result
+        if ($result= $conn -> query($sql)) {
+                            
+        }
+                            
+        //fetch resulting rows as an array
+        $employee = mysqli_fetch_assoc($result);
+
+        return $employee['name'];
     }
 ?>

@@ -80,7 +80,9 @@
                 <tr>
                     <td><?= $tubes[$i]['id'] ?></td>
                     <td><?= $tubes[$i]['length_check1'] ?></td>
-                    <td><?= $tubes[$i]['remarks_cut'] ?></td>
+                    <td><?php if(!(empty($tubes[$i]['remarks_cut']))){
+                                echo $tubes[$i]['remarks_cut'];
+                    }?></td>
                 </tr>
                 <?php endfor; ?>
             </tbody>
@@ -210,6 +212,6 @@
 <?php 
    $numPages--;
    $from = $to;
-   $to += 25;
+   $to += 20;
     }
 ?>

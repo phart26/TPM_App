@@ -36,6 +36,7 @@
 
                 //get job number linked to that mill
                 $sql = "SELECT * FROM orders_tbl WHERE device = '".$mill."' AND has_finished = 0";
+
                 $_resultConn = $conn -> query($sql);
 
                 if(!empty($_resultConn)){

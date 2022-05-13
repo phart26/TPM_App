@@ -17,7 +17,7 @@
                 <h2 class="title">
                     <strong>TPM Welding-Station Check Sheet</strong>
                 </h2>
-                <div class="image"> <img src="logo_tpm.jpeg"></div>
+                <div class="image"> <img src="/opt/bitnami/apache2/htdocs/TPM-master/TPM_Forms/pages/logo_tpm.jpeg"></div>
         </div>
         
         <table class="header">
@@ -59,7 +59,7 @@
             </tr>
 
             <tr>
-                <td class="pad-b-10">Date Started: <?= $orderACT['start_time'] ?></td>                
+                <td class="pad-b-10">Date Started: <?= $orderACT['began'] ?></td>                
                 <td class="pad-b-10"></td>
             </tr>
             
@@ -121,6 +121,6 @@
 <?php 
    $numPages--;
    $from = $to;
-   $to += 25;
+   $to += 17;
     }
 ?>

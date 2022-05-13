@@ -1,77 +1,32 @@
-
 <?php
-    use Dompdf\Dompdf;
+    $header_tilte = "PDF Generation";
     include '../Connections/connectionTPM.php';
-    
+    include 'header.php';    
+?>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<?php    
 
-    if(isset($_GET['pdf'])){
-        
+    if(isset($_GET['pdf'])){        
 
         $job = $_GET['job'];
-        ob_start();
 
+        $sql = "UPDATE orders_tbl SET gen_pdf = 1 WHERE job = '".$_GET['job']."'";
         
-        include 'DBForReports.php';
-
-        require_once 'overviewSheet_pdf.php';
-        require_once 'first_part_drift_confirmation_pdf.php';
-        require_once 'welding_pdf.php';
-        require_once '240518cutoff_station_check_sheet_pdf.php';
-        require_once '240518inspection_rpt_pdf.php';
-
-        if($tubes[0]['end1_read1'] != 0){
-            require_once '240518ring_station_check_list_pdf.php';
+        if ($result= $conn -> query($sql)) {
+                
         }
 
-        if(!empty($rings)){
-            require_once '240518geo_form_ring_inspection_pdf.php';
-        }
-
-        if($tubes[0]['ring_num1'] != ""){
-            require_once 'final_inspection_geo_form_pdf.php';
-        }
-
-        // require_once 'worksheet_pdf.php';
-        require_once 'dompdf/autoload.inc.php';
-        $fileName = strval($job)."_forms.pdf";
-        
-
-        $html = ob_get_clean();
-        
-
-        // instantiate and use the dompdf class
-        $dompdf = new Dompdf();
-        $dompdf->set_option('isHtml5ParserEnabled', true);
-        $dompdf->loadHtml($html);
-
-        // (Optional) Setup the paper size and orientation
-        $dompdf->setPaper('A4', 'landscape');
-
-        // Render the HTML as PDF
-        $dompdf->render();
-
-        // Output the generated PDF to Browser
-        $output = $dompdf->output();
-
-        $f;
-$l;
-if(headers_sent($f,$l))
-{
-    echo $f,'<br/>',$l,'<br/>';
-    die('now detect line');
-}
-        $dompdf -> stream($fileName);
+        // echo '<script> alert("The pdf for job '.$job.' will be emailed to you shortly!")</script>';
+        echo '<script> toastr.success("The pdf for job '.$job.' will be emailed to you shortly!") </script>';
+        shell_exec('/opt/bitnami/php/bin/php -q /opt/bitnami/apache2/htdocs/TPM-master/TPM_Forms/pages/genPaperwork.php > /dev/null 2>/dev/null &');       
     }
 ?>
 
 <?php
-    //include '../Connections/connectionTPM.php';
-?>
-
-<?php
     $order = array();
-    if(isset($_GET['Search']) || isset($_GET['pdf'])){
-        
+    if(isset($_GET['Search']) || isset($_GET['pdf'])){        
+
         if($_GET['job']!= ""){
             $sql100 = 'SELECT * FROM orders_tbl WHERE job = "'.$_GET["job"].'"';
 
@@ -80,169 +35,142 @@ if(headers_sent($f,$l))
             
             }
             $order = mysqli_fetch_array($result100);
-        }
-
-        
+        }        
     }
-	
+    //
+    $orderRecords = [];
+    $sql = 'SELECT * FROM orders_tbl WHERE 1 order by `job` DESC';
+    if ($rslt = $conn -> query($sql)) {
+        while ($row = $rslt -> fetch_assoc()) {            
+            array_push($orderRecords, $row);
+        }
+        $rslt -> free_result();
+    }   
+
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-   "http://www.w3.org/TR/html4/loose.dtd">
-
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="description" content="Table display for out going TPM orders for the next two weeks">
-        <meta name="viewport" content="width=device-width, initial-scale = 1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
-        <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-        <script src = "https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-        <script src = "https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-        <link rel = "stylesheet" href = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
-        <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400|Slabo+27px" rel="stylesheet">
-        <link rel = "stylesheet" href = "activeOrders.css">
-        <link rel = "stylesheet" href = "hamburger.css">
-        <link rel = "stylesheet" href = "https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" />
-        <link href = "https://fonts.googleapis.com/css?family=Merriweather|Playfair+Display|Raleway:400,700|Vollkorn:700&display=swap" rel="stylesheet">
-
-        <title>PDF Generation</title>
-    </head>
-  <body>
-  <div class="straightNav center">
-        <div class="menu">
-            <a href="upcomingOrders.php" >Upcoming Orders</a>
-            <a href="../../TPM_Orders/todTomOrders.php" >Shipping Today and Tomorrow</a>
-            <a href="millTable.php">Mills</a>
-            <a href="index.php">All Orders</a>
+<div class="container-fluid px-4 pb-4">
+    <div class="card my-4">
+        <div class="card-header">
+            <h3 class="text-center py-0"><b> Generate Forms</b></h3>
         </div>
-    </div>
-   <!-- nav bar -->
-   <div class="navBar">
-        <div class="nav-toggle">
-            <div class="nav-toggle-bar"></div>
-        </div>
-
-        <nav id="nav" class="nav">
-            <ul>
-                <li><h3><a href="upcomingOrders.php" id="two">Upcoming Orders</a></h3></li>
-                <li><h3><a href="../../TPM_Orders/todTomOrders.php" id="two" >Shipping Today</a></h3></li>
-                <li><h3><a href="millTable.php" id="two">Mills &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp</a></h3></li>
-                <li><h3><a href="index.php" id="two">All Orders &nbsp &nbsp &nbsp</a></h3></li>
-            </ul>
-        </nav>
-    </div>
-    <script>
-        (function() {
-
-            let hamburger = {
-                nav: document.querySelector('#nav'),
-                navToggle: document.querySelector('.nav-toggle'),
-
-                initialize() {
-                    this.navToggle.addEventListener('click',
-                () => { this.toggle(); });
-                },
-
-                toggle() {
-                    this.navToggle.classList.toggle('expanded');
-                    this.nav.classList.toggle('expanded');
-                },
-            };
-
-            hamburger.initialize();
-
-        }());
-    </script>
-    
-    <div class="tableContainer">
-        <div class ="title">
-                <h2 id="OOTitle"><b>Generate Forms</b></h2>
-        </div>
-        <form action="testPDFGen.php" method="GET" class="center">
-            <label for="job" style="font-size:45px;">Job #</label>
-            <input type="text" class="form-control center" style="font-size:30px; width: 30%; margin-left: 35%;" name="job" placeholder="1234">
-            <input type="submit" class="btn btn-primary btn-md " name="Search" value="Search">
-        </form>
-        
-        <div class="outTable">
-            <table id= "outgoingOrders" class="table table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <!-- <td style ="vertical-align: middle;" >Mill</td> -->
-                        <td style ="vertical-align: middle;">Job Number</td>
-                        <td style ="vertical-align: middle;">Company Name</td>
-                        <td style ="vertical-align: middle;">Quantity</td>
-                        <td style ="vertical-align: middle;">Ship Date</td>
-                        <td style ="vertical-align: middle;">Status</td>
-                    </tr>
-                </thead>
-                <tbody>
-                        <?php if(!empty($order)): ?>
-                            <tr>
-                                <!-- <td style ="vertical-align: middle;"><?php //echo ($order['device']); ?></td> -->
-                                <td style ="vertical-align: middle;"><?php echo htmlspecialchars($order['job']); ?></td>
-                                <td style ="vertical-align: middle;"><?php echo htmlspecialchars(getCustomer($order['cust_id'])); ?></td>
-                                <td style ="vertical-align: middle;"><?php echo htmlspecialchars($order['quantity']); ?></td>
-                                <td style ="vertical-align: middle;"><?php echo htmlspecialchars($order['ship_date']); ?></td>
-                                <td style ="vertical-align: middle;">
-                                    <?php 
-                                       if($order['has_started'] == 0){
-                                           echo "Pending";
-                                       }else if(($order['has_started'] == 1) && ($order['has_finished'] == 0)){
-                                           echo "Active";
-                                       }else{
-                                           echo "Completed";
-                                       }
-                                    ?></td>     
-                            </tr>
-                        <?php endif;?>
-                    <?php
-
-                        function getCustomer($cust_id){
-                            include '../Connections/connectionTPM.php';
-                            $sqls = "SELECT * FROM cust_tbl WHERE cust_id = '".$cust_id."'";
-
-                            //make query & get result
-                            if ($results= $conn -> query($sqls)) {
-                            
-                            }
-                            
-                            //fetch resulting rows as an array
-                            $orderACTS = mysqli_fetch_assoc($results);
-
-                            return $orderACTS['customer'];
-                        }
-                    ?>
-                </tbody>
-            </table>
-        </div>
-        <div class="pdfBtn">
-            <form action="testPDFGen.php" method="GET" class="center">
-                <input type="hidden" name="job" value="<?php echo $order['job'] ?>">
-                <input type="submit" name="pdf" value="Generate PDF" class="button">
+        <div class="card-body">
+            <form action="testPDFGen.php" method="GET" class="text-center mx-auto col-3 mt-0 pt-0">
+                <label for="job" style="font-size:45px;">Job # <?= !empty($_GET['job']) ? $_GET['job'] : '';?></label>                
+                <!-- <input type="text" class="form-control center" name="job" placeholder="1234" required> -->
+                <select class="job-search form-control center py-1" name="job">
+                    <?php foreach($orderRecords as $key => $row): ?>
+                        <option value="<?= $row['job']?>" <?php if(!empty($_GET['job']) && ( $_GET['job'] == $row['job'] ) ) echo 'selected'; ?> >
+                            <?= $row['job']?>
+                        </option>
+                    <?php endforeach;?>
+                </select>
+                <input type="submit" class="btn btn-info btn-primary mt-4" name="Search" value="Search">
             </form>
+            
+            <div class="outTable">
+                <table id="outgoingOrders" class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <td style ="vertical-align: middle;" >Mill</td>
+                            <td style ="vertical-align: middle;">Job Number</td>
+                            <td style ="vertical-align: middle;">Company Name</td>
+                            <td style ="vertical-align: middle;">Quantity</td>
+                            <td style ="vertical-align: middle;">Ship Date</td>
+                            <td style ="vertical-align: middle;">Status</td>
+                            <?php if(!empty($_GET['pdf']) && !empty($_GET['job'])):?>
+                                <td style ="vertical-align: middle;">
+                                    Form Preview
+                                </td>
+                            <?php endif;?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <?php if(!empty($order)): ?>
+                                <tr>
+                                    <td style ="vertical-align: middle;"><?php echo ($order['device']); ?></td>
+                                    <td style ="vertical-align: middle;"><?php echo htmlspecialchars($order['job']); ?></td>
+                                    <td style ="vertical-align: middle;"><?php echo htmlspecialchars(getCustomer($order['cust_id'])); ?></td>
+                                    <td style ="vertical-align: middle;"><?php echo htmlspecialchars($order['quantity']); ?></td>
+                                    <td style ="vertical-align: middle;"><?php echo htmlspecialchars($order['ship_date']); ?></td>
+                                    <td style ="vertical-align: middle;">
+                                        <?php 
+                                        if($order['has_started'] == 0){
+                                            echo "Pending";
+                                        }else if(($order['has_started'] == 1) && ($order['has_finished'] == 0)){
+                                            echo "Active";
+                                        }else{
+                                            echo "Completed";
+                                        }
+                                        ?>
+                                    </td>  
+                                    <?php if(!empty($_GET['pdf']) && !empty($_GET['job'])):?>
+                                        <td style ="vertical-align: middle;">
+                                            <a class="btn btn-success" href="http://198.71.55.128/page/paperwork/<?= $_GET['job']?>_forms.pdf" target="_blank"><i class="fa fa-file-pdf-o"></i> Preview PDF</a>
+                                        </td>   
+                                    <?php endif;?>
+                                </tr>
+                            <?php endif;?>
+                        <?php
+
+                            function getCustomer($cust_id){
+                                include '../Connections/connectionTPM.php';
+                                $sqls = "SELECT * FROM cust_tbl WHERE cust_id = '".$cust_id."'";
+
+                                //make query & get result
+                                if ($results= $conn -> query($sqls)) {
+                                
+                                }
+                                
+                                //fetch resulting rows as an array
+                                $orderACTS = mysqli_fetch_assoc($results);
+
+                                return $orderACTS['customer'];
+                            }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+            <div class="<?= !empty($_GET['Search']) ? '' : 'd-none'; ?>">
+                <form action="testPDFGen.php" method="GET" class="center">
+                    <input type="hidden" name="job" value="<?php echo !empty($order['job']) ? $order['job'] : '' ?>">
+                    <input type="hidden" name="pdf" value="Generate PDF">
+                    <button type="submit" class="btn btn-danger"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Generate PDF</button>
+                </form>
+            </div>
+
         </div>
+    </div>
+</div>
 
-        <?php
-            if(isset($_GET['Search'])){
-                echo '<style type="text/css">
-                    .pdfBtn{
-                    display: block;
-                }
-                </style>';
-            }
-         ?>
-    </div> 
+<script type="text/javascript">
+  $(function () {    
+    $('#outgoingOrders').DataTable( {        
+        responsive: true,
+        // pageLength : 25,
+    } ); 
+    
+    $('.job-search').select2();
+  });
+</script>  
+<style>
+    tbody {
+        font-size: 12pt;
+    }
+    .dataTables_length label, .dataTables_filter label{
+        font-size: 12pt;
+    }
 
-    
-    
+
+    .select2-container .select2-selection--single{
+        font-size: 1.5em;
+        height: 41px; 
+        overflow: auto;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered{
+        line-height: 39px;
+    }    
+</style>
+
   </body>
 </html>

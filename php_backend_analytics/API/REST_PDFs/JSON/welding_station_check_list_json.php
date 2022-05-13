@@ -52,6 +52,7 @@
    $nextTubesMill = array();
    $nextTubeMill = "";
    $nextTube = "";
+   $isScrapTube = false;
    while($tubes = mysqli_fetch_array($result6)){
        $nextTubesMill[] = $tubes;
    }
@@ -60,9 +61,11 @@
        $nextTubeMill = $nextTubesMill[0]['id'];
    }
 
-   if($nextTubeMill == ""){
+   if($nextTubeMill == ""){   
 
-        $sql6 = "SELECT * FROM tubes_tbl WHERE job = $job AND mill_check = 1 ORDER BY id DESC";
+        // $sql6 = "SELECT * FROM tubes_tbl WHERE job = $job AND mill_check = 1 ORDER BY id DESC";        
+        
+        $sql6 = "SELECT *, SUBSTRING_INDEX(id, '-', -1)*1 as cnt FROM tubes_tbl WHERE job = $job AND mill_check = 1 ORDER BY cnt DESC limit 1";
 
         if ($result6= $conn -> query($sql6)) {
         
@@ -75,6 +78,18 @@
         if(!empty($nextTubes) && (intval((substr($nextTubes[0]['id'], strpos($nextTubes[0]['id'],'-')+1))) != intval($orderACT['quantity']))){
             $nextTube = substr($nextTubes[0]['id'], 0, 5).str_pad(strval(intval(substr($nextTubes[0]['id'], strpos($nextTubes[0]['id'],'-') +1))+1), strlen($orderACT['quantity']),"0", STR_PAD_LEFT);
         }
+    }
+
+    //check the tubenumber was scrapped or not before.
+    $tubeCheck = !empty($nextTube) ? $nextTube : $nextTubeMill;
+    if(!empty($tubeCheck)){
+        
+        $sql7 = "SELECT * FROM scrap_tbl WHERE job = $job AND tube_id = '".$tubeCheck."'";
+
+        if ($result7 = $conn -> query($sql7)) {
+            $row = mysqli_num_rows($result7);
+        }      
+        $isScrapTube = !empty($row) ? true : false;
     }
 
     $jsonArr = array(
@@ -96,7 +111,8 @@
             'arcLength' => $weldSpec['Arc_length'],
             'torchAngle' => $weldSpec['Torch_angle'],
             'nextTubeMill' => $nextTubeMill,
-            'nextTube' => $nextTube
+            'nextTube' => $nextTube,
+            'isScrapTube' => $isScrapTube
     );
 
     

@@ -26,7 +26,6 @@
         return $response;
     }
 
-
     function notFound(){
         echo  'No data found';
     }
@@ -51,22 +50,26 @@
             $qty = !empty($result['qty']) ? $result['qty'] : 0;
             $job_id = strval($job) . "-";
             $tube_no = "1";
-            $tube_id = str_pad($tube_no, strlen($qty), "0", STR_PAD_LEFT );
-            $tube_id = $job_id . $tube_id;
-            
-
+            $tube_id = str_pad($tube_no, strlen($qty), "0", STR_PAD_LEFT);
+            $tube_id = $job_id . $tube_id;   
 
             $sql = "INSERT INTO tubes_tbl(id, job, setup_op, coil_change, coil, fil_mesh_change_top, filter_mesh_top, fil_mesh_change_bot, filter_mesh_bot, drain_change_top, drain_mesh_top, drain_change_bot, drain_mesh_bot, mill_time, mill_check) VALUES('$tube_id', '$job', '$setup_op', '".(!empty($result['new_coil']) ? $result['new_coil'] : "")."', '$coil', '".(!empty($result['new_filter_top']) ? $result['new_filter_top'] : "")."', '$filterTop', '".(!empty($result['new_filter_bot']) ? $result['new_filter_bot'] : "")."', '$filterBot', '".(!empty($result['new_drain_top']) ? $result['new_drain_top'] : "")."', '$drainTop', '".(!empty($result['new_drain_bot']) ? $result['new_drain_bot'] : "")."', '$drainBot', '$timeStamp', 0)";
 
-            if ($resultConn= $conn -> query($sql)) {
-            
+            $resultConn = $conn->query($sql);
+
+            if(!$resultConn) {
+                echo json_encode(['first_tube_reg' => false, 'msg' => 'first tube already exist' ]);
+                exit;                
+
+            }else{
+                
+                $sql = "UPDATE orders_tbl SET began = '$timeStamp' WHERE job = '$job'";                
+                $conn -> query($sql);
+
+                echo json_encode(['first_tube_reg' => true, 'msg' => 'first tube registered' ]);                
+                exit;
             }
 
-            $sql = "UPDATE orders_tbl SET began = '$timeStamp' WHERE job = '$job'";
-            
-            if ($resultConn= $conn -> query($sql)) {
-            
-            }
         }
 
         if(array_key_exists('weld_chksheet', $results)){
@@ -112,11 +115,8 @@
                 
                 }
             }
-
                 
         }
-
-
 
         if(array_key_exists('cutoff', $results)){
             $result= $results['cutoff'];
@@ -246,9 +246,6 @@
             $drift_insp = $result['drift_insp'];
             $job = $result['job'];
             print_r($result);
-            
-            
-            
 
             $sql = "UPDATE orders_tbl SET drift_dim = '$drift_dim', drift_insp = '$drift_insp', drift_insp_time = '$timeStamp' WHERE job = '$job'";
 
@@ -272,9 +269,6 @@
             $tube_id = $result['tube_id'];
             $job = $result['job'];
             print_r($result);
-            
-            
-            
 
             $sql = "UPDATE tubes_tbl SET id_drift = '$id_drift', od_check3 = '$od_check3', length_check2 = '$length_check2', weld = '$weld', repairs = '$repairs', inspector = '$inspector', insp_time = '$timeStamp', insp_check = 1 WHERE id = '$tube_id'";
 
