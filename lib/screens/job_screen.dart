@@ -22,6 +22,7 @@ class _JobScreenState extends State<JobScreen> {
   double width = 0;
   int selected = -1;
   bool isDataLoading = false;
+  String isLoadingJob = "";
   Map<String, dynamic> data;
   APICall apiCall;
   @override
@@ -41,8 +42,8 @@ class _JobScreenState extends State<JobScreen> {
     setState(() {
       isDataLoading = false;
       data = json.decode(widget.pref.jobData);
+      print("-d>>>>>>>>>>>>.load dataa ${data}");
     });
-
   }
 
   @override
@@ -71,14 +72,16 @@ class _JobScreenState extends State<JobScreen> {
                             width: width * .30,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                primary: Color.fromRGBO(153, 206, 238, 1)
-                              ),
+                                  primary: Color.fromRGBO(153, 206, 238, 1)),
                               onPressed: () {
                                 Navigator.of(context)
                                     .pushReplacementNamed(Routes.loginScreen);
                               },
                               child: Text('Log Out',
-                                  style: TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold)),
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold)),
                             ),
                           ),
                           SizedBox(
@@ -86,14 +89,16 @@ class _JobScreenState extends State<JobScreen> {
                             width: width * .30,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                primary: Color.fromRGBO(153, 206, 238, 1)
-                              ),
+                                  primary: Color.fromRGBO(153, 206, 238, 1)),
                               onPressed: () {
                                 Navigator.of(context)
                                     .pushReplacementNamed(Routes.modeSelection);
                               },
                               child: Text('Home Page',
-                                  style: TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold)),
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold)),
                             ),
                           ),
                         ],
@@ -110,17 +115,19 @@ class _JobScreenState extends State<JobScreen> {
                                     children: <Widget>[
                                       CircularProgressIndicator(),
                                       SizedBox(height: 20),
-                                      Text('Please wait we are fetching data...')
+                                      Text(
+                                          'Please wait we are fetching data...')
                                     ],
-                                  )
-                              )
-                              :
-                              Expanded(child:
-                                Column(
+                                  ))
+                              : Expanded(
+                                  child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [Text('No Active Jobs', style: bigFontStyle.copyWith(color: Colors.black))],
-                                )
-                              ),
+                                  children: [
+                                    Text('No Active Jobs',
+                                        style: bigFontStyle.copyWith(
+                                            color: Colors.black))
+                                  ],
+                                )),
                         ],
                       ),
                     ],
@@ -160,11 +167,21 @@ class _JobScreenState extends State<JobScreen> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(8.0, 3, 8, 3),
       child: InkWell(
-        onTap: () {
+        onTap: () async {
+          setState(() {
+            isLoadingJob = job;
+          });
           widget.pref.jobId = job;
-          Navigator.of(context).pushReplacementNamed(Routes.formSelectionScreen);
+          apiCall = APICall();
+          await apiCall.getData(widget.pref);
+          setState(() {
+            isLoadingJob = "";
+          });
+          Navigator.of(context)
+              .pushReplacementNamed(Routes.formSelectionScreen);
         },
         child: Card(
+          key: ObjectKey(job),
           color: (index == selected) ? primaryColor : Colors.white,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -182,6 +199,16 @@ class _JobScreenState extends State<JobScreen> {
                     fontSize: 30,
                   ),
                 ),
+                if (isLoadingJob == job)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator())
+                    ],
+                  )
               ],
             ),
           ),
