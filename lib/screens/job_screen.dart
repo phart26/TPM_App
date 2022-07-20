@@ -149,7 +149,7 @@ class _JobScreenState extends State<JobScreen> {
               return getJobCard(
                   '${data['jobsInsp'][index][0]}',
                   index,
-                  '${data['jobsInsp'][index][1]}',
+                  '${data['jobsInsp'][index][3]=='1'?'OD':'ID'}: ${data['jobsInsp'][index][1]}',
                   '${data['jobsInsp'][index][2]}');
             }),
         floatingActionButton: FloatingActionButton.extended(
@@ -191,7 +191,7 @@ class _JobScreenState extends State<JobScreen> {
                 Text(
                   'Job #$job' +
                       '        ' +
-                      'OD: $od' +
+                      '$od' +
                       '        ' +
                       'Length: $length',
                   style: bigFontStyle.copyWith(

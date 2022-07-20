@@ -435,7 +435,7 @@ class _InspectionStationCheckListState
                         SizedBox(
                           width: width * 0.9,
                           child: Text(
-                              'OD: ${data['formData']['od'] ?? "--"} +${data['formData']['odPos'] ?? "--"} -${data['formData']['odNeg'] ?? "--"}',
+                              '${data['formData']['isOd'] == '1' ? 'OD' : 'ID'}: ${data['formData']['od'] ?? "--"} +${data['formData']['odPos'] ?? "--"} -${data['formData']['odNeg'] ?? "--"}',
                               style: bigBoldFontStyle.copyWith()),
                         ),
                       ],
